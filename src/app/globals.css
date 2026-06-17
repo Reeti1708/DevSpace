@@ -1,26 +1,111 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-card-bg: var(--card-bg);
+  --color-card-border: var(--card-border);
+  --color-header-bg: var(--header-bg);
+  --color-footer-bg: var(--footer-bg);
+  --color-banner-bg: var(--banner-bg);
+  --color-text-muted: var(--text-muted);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-fira-code);
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-pulse-slow: pulse-slow 3s ease-in-out infinite;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  --background: #fcfcfc;
+  --foreground: #09090b;
+  --accent: #0284c7;
+  --accent-hover: #0369a1;
+  
+  --card-bg: rgba(255, 255, 255, 0.7);
+  --card-border: rgba(9, 9, 11, 0.06);
+  --header-bg: rgba(252, 252, 252, 0.8);
+  --footer-bg: #f4f4f5;
+  --banner-bg: rgba(2, 132, 199, 0.05);
+  --text-muted: #52525b;
+  --grid-color: rgba(9, 9, 11, 0.04);
+}
+
+html.dark {
+  --background: #030303;
+  --foreground: #f8fafc;
+  --accent: #00f0ff;
+  --accent-hover: #38bdf8;
+  
+  --card-bg: rgba(9, 9, 11, 0.6);
+  --card-border: rgba(255, 255, 255, 0.05);
+  --header-bg: rgba(3, 3, 3, 0.8);
+  --footer-bg: #050507;
+  --banner-bg: rgba(0, 240, 255, 0.04);
+  --text-muted: #94a3b8;
+  --grid-color: rgba(255, 255, 255, 0.05);
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), sans-serif;
+  overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
+
+/* Custom styles for grid backgrounds and animations */
+.bg-grid-pattern {
+  background-image: 
+    linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.bg-dot-pattern {
+  background-image: radial-gradient(var(--grid-color) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #09090b;
+}
+::-webkit-scrollbar-thumb {
+  background: #27272a;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3f3f46;
+}
+
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
