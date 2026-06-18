@@ -1,0 +1,31 @@
+services:
+  # Express Backend Web Service
+  - type: web
+    name: devspace-backend
+    env: node
+    plan: free
+    rootDir: server
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: PORT
+        value: 5001
+      - key: MONGO_URI
+        sync: false
+        value: "" # Provide your MongoDB Atlas URI here
+      - key: JWT_SECRET
+        generateValue: true
+
+  # Next.js Frontend Web Service
+  - type: web
+    name: devspace-frontend
+    env: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NEXT_PUBLIC_BACKEND_URL
+        fromService:
+          name: devspace-backend
+          type: web
+          property: host
