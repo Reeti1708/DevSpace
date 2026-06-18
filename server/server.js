@@ -105,20 +105,21 @@ const DEFAULT_FILES = [
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DevSpace Playground</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <h1>Welcome to DevSpace!</h1>
-  <p>Start collaborating by editing index.html, styles.css, or app.js in real time.</p>
+  <p>Start collaborating by editing index.html, style.css, or script.js in real time.</p>
   <button id="clickBtn">Click Me</button>
   
-  <script src="app.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>`
   },
   {
-    name: "styles.css",
+    name: "style.css",
     content: `body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: #09090b;
@@ -160,8 +161,8 @@ button:hover {
 }`
   },
   {
-    name: "app.js",
-    content: `// app.js - Write custom logic here!
+    name: "script.js",
+    content: `// script.js - Write custom logic here!
 console.log("JavaScript execution context initialized.");
 
 const button = document.getElementById("clickBtn");

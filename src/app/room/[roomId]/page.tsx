@@ -337,6 +337,20 @@ export default function RoomPage({ params }: PageProps) {
     const iframe = iframeRef.current;
     const yfiles = ydocRef.current.getMap("files");
 
+    // Check if files map is empty (still initializing)
+    if (yfiles.size === 0) {
+      iframe.srcdoc = `
+        <body style="background:#09090b;color:#fafafa;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;">
+          <div style="text-align:center;">
+            <div style="width:24px;height:24px;border:2px solid #22d3ee;border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 12px auto;"></div>
+            <p style="color:#71717a;font-size:12px;font-family:monospace;">Connecting to collaborative sandbox...</p>
+            <style>@keyframes spin{to{transform:rotate(360deg);}}</style>
+          </div>
+        </body>
+      `;
+      return;
+    }
+
     // Check if index.html exists
     const yHtml = yfiles.get("index.html") as Y.Text | undefined;
     if (!yHtml) {
@@ -374,12 +388,17 @@ export default function RoomPage({ params }: PageProps) {
       return match;
     });
 
-    // 3. Backward compatibility / auto-run app.js if not linked
-    const hasAppJsLinked = htmlContent.includes("app.js");
-    let appJsScript = "";
-    if (!hasAppJsLinked && yfiles.has("app.js")) {
-      const yAppJs = yfiles.get("app.js") as Y.Text;
-      appJsScript = `<script>/* Auto-injected app.js */\n${yAppJs.toString()}</script>`;
+    // 3. Backward compatibility / auto-run script.js or app.js if not linked
+    const hasJsScriptLinked = htmlContent.includes("script.js") || htmlContent.includes("app.js");
+    let autoInjectedScript = "";
+    if (!hasJsScriptLinked) {
+      if (yfiles.has("script.js")) {
+        const yScriptJs = yfiles.get("script.js") as Y.Text;
+        autoInjectedScript = `<script>/* Auto-injected script.js */\n${yScriptJs.toString()}</script>`;
+      } else if (yfiles.has("app.js")) {
+        const yAppJs = yfiles.get("app.js") as Y.Text;
+        autoInjectedScript = `<script>/* Auto-injected app.js */\n${yAppJs.toString()}</script>`;
+      }
     }
 
     // 4. Inject log relay
@@ -426,11 +445,11 @@ export default function RoomPage({ params }: PageProps) {
       compiledHtml = relayScript + compiledHtml;
     }
 
-    if (appJsScript) {
+    if (autoInjectedScript) {
       if (compiledHtml.includes("</body>")) {
-        compiledHtml = compiledHtml.replace("</body>", `${appJsScript}\n</body>`);
+        compiledHtml = compiledHtml.replace("</body>", `${autoInjectedScript}\n</body>`);
       } else {
-        compiledHtml = compiledHtml + appJsScript;
+        compiledHtml = compiledHtml + autoInjectedScript;
       }
     }
 
