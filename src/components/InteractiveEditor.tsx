@@ -11,7 +11,6 @@ import {
   FolderTree, 
   Settings,
   ChevronRight,
-  Sparkles,
   Info
 } from "lucide-react";
 

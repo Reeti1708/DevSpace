@@ -2,57 +2,84 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { 
   Terminal, 
   Users, 
   MessageSquare, 
   Play, 
-  Activity, 
   MonitorSmartphone,
   ChevronRight,
   Github,
   ArrowRight,
   Code,
   Share2,
-  Cpu,
   Laptop,
   CheckCircle2,
   Sparkles,
-  Layers,
-  Heart,
-  ExternalLink,
   Plus,
   Copy,
   Check,
   Zap,
-  Globe,
-  Lock,
-  MessageCircle,
-  FileCode,
   X,
   Star,
   Sun,
-  Moon
+  Moon,
+  Loader2
 } from "lucide-react";
 import InteractiveEditor from "@/components/InteractiveEditor";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Home() {
+  const router = useRouter();
+  const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5001";
+
+  const { user, logout, fetchWithAuth } = useAuth();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [roomName, setRoomName] = useState("");
   const [roomCreatorName, setRoomCreatorName] = useState("");
   const [editorTheme, setEditorTheme] = useState("vs-dark");
+  const [roomVisibility, setRoomVisibility] = useState<"public" | "readonly" | "private">("public");
   const [modalStep, setModalStep] = useState<"form" | "loading" | "success">("form");
   const [generatedLink, setGeneratedLink] = useState("");
   const [copied, setCopied] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [theme, setTheme] = useState("dark");
 
+  const [userRooms, setUserRooms] = useState<any[]>([]);
+  const [loadingRooms, setLoadingRooms] = useState(false);
+
   useEffect(() => {
     // Check initial class on documentElement
     const isLight = document.documentElement.classList.contains("light") || 
                     !document.documentElement.classList.contains("dark");
-    setTheme(isLight ? "light" : "dark");
+    setTimeout(() => setTheme(isLight ? "light" : "dark"), 0);
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      setRoomCreatorName(user.username);
+      
+      // Fetch user rooms
+      setLoadingRooms(true);
+      fetchWithAuth(`${BACKEND_URL}/api/rooms`)
+        .then(res => res.json())
+        .then(data => {
+          if (Array.isArray(data)) {
+            setUserRooms(data);
+          }
+          setLoadingRooms(false);
+        })
+        .catch(err => {
+          console.error("Error fetching rooms:", err);
+          setLoadingRooms(false);
+        });
+    } else {
+      setUserRooms([]);
+      setRoomCreatorName("");
+    }
+  }, [user, BACKEND_URL, fetchWithAuth]);
 
   const toggleTheme = () => {
     if (theme === "dark") {
@@ -66,25 +93,53 @@ export default function Home() {
     }
   };
 
-  // Auto-generate a cool room name on mount
-  useEffect(() => {
+  const openModal = () => {
     const descriptors = ["collaborative", "cyber", "neon", "sync", "hyper", "matrix", "vector", "cloud"];
     const nouns = ["playground", "sandbox", "station", "terminal", "matrix", "space", "hub", "node"];
     const randomName = `${descriptors[Math.floor(Math.random() * descriptors.length)]}-${nouns[Math.floor(Math.random() * nouns.length)]}-${Math.floor(Math.random() * 900) + 100}`;
     setRoomName(randomName);
-  }, [isModalOpen]);
+    if (user) {
+      setRoomCreatorName(user.username);
+    }
+    setIsModalOpen(true);
+  };
 
-  const handleCreateRoom = (e: React.FormEvent) => {
+  const handleCreateRoom = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!roomCreatorName.trim()) return;
 
     setModalStep("loading");
     
-    // Simulate server connecting to Socket.io and creating space
-    setTimeout(() => {
+    try {
+      const response = await fetchWithAuth(`${BACKEND_URL}/api/rooms`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ roomId: roomName, name: roomName, visibility: roomVisibility })
+      });
+      
+      if (!response.ok) {
+        throw new Error("Failed to initialize room session");
+      }
+      
+      const data = await response.json();
+      setGeneratedLink(`${window.location.origin}/room/${data.roomId}`);
       setModalStep("success");
-      setGeneratedLink(`https://devspace.io/room/${roomName}`);
-    }, 1800);
+
+      // Refetch user rooms list if logged in
+      if (user) {
+        fetchWithAuth(`${BACKEND_URL}/api/rooms`)
+          .then(res => res.json())
+          .then(rooms => {
+            if (Array.isArray(rooms)) setUserRooms(rooms);
+          })
+          .catch(err => console.error("Error refetching rooms:", err));
+      }
+    } catch (err) {
+      console.error(err);
+      showToast("Connection to backend server failed. Using local fallback.");
+      setGeneratedLink(`${window.location.origin}/room/${roomName}`);
+      setModalStep("success");
+    }
   };
 
   const handleCopyLink = () => {
@@ -115,7 +170,7 @@ export default function Home() {
         <span className="inline-flex items-center justify-center px-1.5 py-0.5 rounded bg-cyan-400 text-zinc-950 text-[9px] font-bold uppercase mr-1 animate-pulse">New</span>
         <span>Introducing DevSpace v2.0 with instant peer connection.</span>
         <button 
-          onClick={() => setIsModalOpen(true)}
+          onClick={openModal}
           className="underline hover:text-cyan-300 font-bold transition-colors inline-flex items-center gap-0.5 cursor-pointer"
         >
           Try Now <ChevronRight className="w-3 h-3" />
@@ -168,12 +223,38 @@ export default function Home() {
               )}
             </button>
             
-            <button 
-              onClick={() => setIsModalOpen(true)}
-              className="relative inline-flex h-9 items-center justify-center rounded-lg bg-cyan-400 px-4 py-2 text-xs font-mono font-bold text-zinc-950 shadow-lg shadow-cyan-400/10 hover:shadow-cyan-400/20 transition-all hover:bg-cyan-300 active:scale-95 cursor-pointer"
-            >
-              Try it Out
-            </button>
+            {user ? (
+              <div className="flex items-center gap-3">
+                <div className="hidden sm:flex flex-col text-right font-mono text-[10px]">
+                  <span className="text-foreground font-bold">{user.username}</span>
+                  <span className="text-zinc-500 truncate max-w-[100px]">{user.email}</span>
+                </div>
+                <div className="w-8 h-8 rounded-full bg-cyan-500/20 border border-cyan-400/30 flex items-center justify-center text-xs font-bold text-cyan-400 select-none uppercase font-mono">
+                  {user.username.slice(0, 2)}
+                </div>
+                <button
+                  onClick={logout}
+                  className="h-8 border border-zinc-800 hover:border-zinc-700 bg-zinc-950 px-3 rounded-lg text-[10px] font-mono font-bold text-zinc-400 hover:text-rose-455 hover:text-rose-400 transition-colors cursor-pointer"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2">
+                <Link
+                  href="/login"
+                  className="h-8 inline-flex items-center rounded-lg border border-zinc-800 hover:border-zinc-700 bg-zinc-950 px-3 text-xs font-mono font-bold text-zinc-400 hover:text-foreground transition-all"
+                >
+                  Login
+                </Link>
+                <Link
+                  href="/signup"
+                  className="h-8 inline-flex items-center rounded-lg bg-cyan-400 hover:bg-cyan-300 px-3 text-xs font-mono font-bold text-zinc-950 transition-all shadow-md shadow-cyan-400/10"
+                >
+                  Register
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </header>
@@ -211,8 +292,8 @@ export default function Home() {
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-2">
               <button 
-                onClick={() => setIsModalOpen(true)}
-                className="inline-flex h-12 items-center justify-center rounded-xl bg-cyan-400 px-8 text-sm font-mono font-bold text-zinc-950 shadow-xl shadow-cyan-400/10 hover:shadow-cyan-400/20 hover:bg-cyan-300 transition-all active:scale-98 w-full sm:w-auto cursor-pointer"
+                onClick={openModal}
+                className="inline-flex h-12 items-center justify-center rounded-xl bg-cyan-400 px-8 text-sm font-mono font-bold text-zinc-955 shadow-xl shadow-cyan-400/10 hover:shadow-cyan-400/20 hover:bg-cyan-300 transition-all active:scale-98 w-full sm:w-auto cursor-pointer"
               >
                 Try it Out <ArrowRight className="ml-2 h-4 w-4" />
               </button>
@@ -536,7 +617,7 @@ export default function Home() {
                     ))}
                   </div>
                   <p className="text-text-muted text-sm italic leading-relaxed">
-                    "DevSpace has completely transformed our remote technical interviewing. We can pair code, chat, and see results instantly without sharing screens."
+                    &quot;DevSpace has completely transformed our remote technical interviewing. We can pair code, chat, and see results instantly without sharing screens.&quot;
                   </p>
                 </div>
                 <div className="flex items-center gap-3 pt-6 border-t border-card-border mt-6">
@@ -557,7 +638,7 @@ export default function Home() {
                     ))}
                   </div>
                   <p className="text-text-muted text-sm italic leading-relaxed">
-                    "As a student teaching web dev, DevSpace makes it so easy to review student code in real time. We spin up rooms in seconds and start hacking."
+                    &quot;As a student teaching web dev, DevSpace makes it so easy to review student code in real time. We spin up rooms in seconds and start hacking.&quot;
                   </p>
                 </div>
                 <div className="flex items-center gap-3 pt-6 border-t border-card-border mt-6">
@@ -578,7 +659,7 @@ export default function Home() {
                     ))}
                   </div>
                   <p className="text-text-muted text-sm italic leading-relaxed">
-                    "It feels like Google Docs for code but with the speed and capabilities of VS Code. The Monaco editor integration is top-notch."
+                    &quot;It feels like Google Docs for code but with the speed and capabilities of VS Code. The Monaco editor integration is top-notch.&quot;
                   </p>
                 </div>
                 <div className="flex items-center gap-3 pt-6 border-t border-card-border mt-6">
@@ -593,6 +674,106 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {/* User Dashboard Section */}
+        {user && (
+          <section id="dashboard" className="w-full py-16 border-t border-zinc-900 bg-zinc-950/40 relative z-10 font-mono">
+            <div className="container mx-auto px-4 md:px-8 max-w-5xl">
+              
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+                <div className="space-y-1">
+                  <h2 className="text-2xl font-bold tracking-tight text-foreground font-mono">
+                    Your Developer Workspace
+                  </h2>
+                  <p className="text-xs text-text-muted">
+                    Manage your persistent, real-time sync coding rooms.
+                  </p>
+                </div>
+                
+                <button
+                  onClick={openModal}
+                  className="h-10 inline-flex items-center gap-1.5 rounded-xl bg-cyan-400 hover:bg-cyan-300 px-5 text-xs font-mono font-bold text-zinc-955 shadow-lg shadow-cyan-400/5 transition-all cursor-pointer select-none"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>New Room</span>
+                </button>
+              </div>
+
+              {loadingRooms ? (
+                <div className="p-16 border border-card-border rounded-2xl bg-zinc-955/30 flex flex-col items-center justify-center gap-3">
+                  <Loader2 className="w-6 h-6 text-cyan-400 animate-spin" />
+                  <span className="text-xs text-text-muted">Fetching workspaces from MongoDB...</span>
+                </div>
+              ) : userRooms.length === 0 ? (
+                <div className="p-16 border border-card-border/60 border-dashed rounded-2xl bg-zinc-950/20 text-center space-y-4">
+                  <p className="text-xs text-text-muted max-w-sm mx-auto leading-relaxed">
+                    You don&apos;t have any active developer rooms yet. Spin up a sandboxed workspace to start collaborating or writing code!
+                  </p>
+                  <button
+                    onClick={openModal}
+                    className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-card-border bg-card-bg hover:bg-zinc-800/10 px-4 text-xs font-bold text-cyan-400 transition-all cursor-pointer"
+                  >
+                    Create a Room
+                  </button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                  {userRooms.map((room) => {
+                    const isPrivate = room.visibility === "private";
+                    const isReadOnly = room.visibility === "readonly";
+                    
+                    return (
+                      <div
+                        key={room.roomId}
+                        className="bg-zinc-900/40 border border-card-border rounded-2xl p-5 hover:border-cyan-500/30 hover:bg-zinc-900/60 transition-all flex flex-col justify-between shadow-lg relative group"
+                      >
+                        <div className="space-y-3">
+                          <div className="flex justify-between items-start">
+                            <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">
+                              {new Date(room.createdAt).toLocaleDateString([], { month: "short", day: "numeric", year: "numeric" })}
+                            </span>
+                            <span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase ${
+                              isPrivate 
+                                ? "bg-rose-500/15 text-rose-400 border border-rose-500/20" 
+                                : isReadOnly 
+                                ? "bg-amber-500/15 text-amber-400 border border-amber-500/20" 
+                                : "bg-cyan-500/15 text-cyan-400 border border-cyan-500/20"
+                            }`}>
+                              {room.visibility}
+                            </span>
+                          </div>
+                          
+                          <div className="space-y-1">
+                            <h4 className="font-bold text-sm text-foreground truncate group-hover:text-cyan-300 transition-colors">
+                              {room.name}
+                            </h4>
+                            <p className="text-[10px] text-zinc-500 select-text font-mono truncate">
+                              ID: {room.roomId}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="pt-5 flex items-center justify-between border-t border-zinc-800/20 mt-4">
+                          <span className="text-[10px] text-zinc-500 flex items-center gap-1.5">
+                            <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
+                            <span>Persistent</span>
+                          </span>
+                          <Link
+                            href={`/room/${room.roomId}?theme=${editorTheme}`}
+                            className="inline-flex items-center text-xs font-bold text-cyan-400 hover:text-cyan-300 gap-0.5 hover:underline"
+                          >
+                            <span>Open</span>
+                            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                          </Link>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </section>
+        )}
 
         {/* Call To Action Section */}
         <section className="w-full py-28 bg-background relative overflow-hidden bg-dot-pattern">
@@ -614,8 +795,8 @@ export default function Home() {
                 </p>
                 <div className="pt-4 flex justify-center">
                   <button 
-                    onClick={() => setIsModalOpen(true)}
-                    className="inline-flex h-12 items-center justify-center rounded-xl bg-cyan-400 px-8 text-sm font-mono font-bold text-zinc-950 shadow-xl shadow-cyan-400/20 hover:shadow-cyan-400/40 hover:bg-cyan-300 transition-all hover:scale-105 active:scale-98 cursor-pointer"
+                    onClick={openModal}
+                    className="inline-flex h-12 items-center justify-center rounded-xl bg-cyan-400 px-8 text-sm font-mono font-bold text-zinc-955 shadow-xl shadow-cyan-400/20 hover:shadow-cyan-400/40 hover:bg-cyan-300 transition-all hover:scale-105 active:scale-98 cursor-pointer"
                   >
                     Try it Out
                   </button>
@@ -708,6 +889,22 @@ export default function Home() {
                       className="w-full bg-background border border-card-border focus:border-cyan-500/50 rounded-lg px-3 py-2 text-sm text-foreground placeholder-zinc-500 focus:outline-none transition-colors font-mono"
                     />
                   </div>
+
+                  {/* Room Visibility Options (Only if logged in) */}
+                  {user && (
+                    <div className="space-y-1.5 text-left">
+                      <label className="text-[10px] uppercase font-bold tracking-wider text-text-muted block font-mono">Room Sharing Visibility</label>
+                      <select 
+                        value={roomVisibility} 
+                        onChange={(e) => setRoomVisibility(e.target.value as any)}
+                        className="w-full bg-background border border-card-border focus:border-cyan-500/50 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none transition-colors font-mono cursor-pointer"
+                      >
+                        <option value="public">Public (Collaborative Sync)</option>
+                        <option value="readonly">Public Read-Only (Peers can only view)</option>
+                        <option value="private">Private (Only you can access)</option>
+                      </select>
+                    </div>
+                  )}
 
                   {/* Editor Theme Option */}
                   <div className="space-y-1.5 text-left">
@@ -812,8 +1009,9 @@ export default function Home() {
                     onClick={() => {
                       setIsModalOpen(false);
                       setModalStep("form");
+                      const creator = roomCreatorName;
                       setRoomCreatorName("");
-                      showToast(`Successfully joined room: ${roomName}`);
+                      router.push(`/room/${roomName}?username=${encodeURIComponent(creator)}&theme=${editorTheme}`);
                     }}
                     className="flex-1 h-11 inline-flex items-center justify-center rounded-xl bg-cyan-400 font-mono font-bold text-xs text-zinc-950 hover:bg-cyan-350 transition-colors cursor-pointer"
                   >
