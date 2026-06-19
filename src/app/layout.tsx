@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Fira_Code } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
+import { Toaster } from "react-hot-toast";
 
 const fontSans = Inter({
   variable: "--font-inter",
@@ -34,6 +35,32 @@ export default function RootLayout({
       <body className="min-h-screen flex flex-col font-sans bg-background text-foreground overflow-x-hidden">
         <AuthProvider>
           {children}
+          <Toaster 
+            position="top-right" 
+            toastOptions={{
+              style: {
+                background: 'rgba(9, 9, 11, 0.9)',
+                color: '#f8fafc',
+                border: '1px solid rgba(255, 255, 255, 0.08)',
+                borderRadius: '12px',
+                fontSize: '13px',
+                fontFamily: 'var(--font-inter), sans-serif',
+                backdropFilter: 'blur(8px)',
+              },
+              success: {
+                iconTheme: {
+                  primary: '#00f0ff',
+                  secondary: '#09090b',
+                },
+              },
+              error: {
+                iconTheme: {
+                  primary: '#ef4444',
+                  secondary: '#09090b',
+                },
+              },
+            }}
+          />
         </AuthProvider>
       </body>
     </html>

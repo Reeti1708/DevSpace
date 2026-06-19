@@ -14,18 +14,15 @@ import {
   ChevronLeft, 
   Copy, 
   Check, 
-  Activity,
   Plus,
   Trash2,
   Edit3,
   Folder,
   Lock,
-  ShieldAlert,
-  Globe,
-  Eye,
   X
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
+import { toast } from "react-hot-toast";
 
 interface UserPresence {
   socketId: string;
@@ -91,7 +88,6 @@ export default function RoomPage({ params }: PageProps) {
   const [consoleLogs, setConsoleLogs] = useState<{ type: "log" | "error"; text: string; time: string }[]>([]);
   const [editorTheme, setEditorTheme] = useState(urlTheme);
   const [isCopied, setIsCopied] = useState(false);
-  const [toastMsg, setToastMsg] = useState("");
 
   const [roomVisibility, setRoomVisibility] = useState<"public" | "readonly" | "private">("public");
   const [roomOwnerId, setRoomOwnerId] = useState<string | null>(null);
@@ -99,6 +95,7 @@ export default function RoomPage({ params }: PageProps) {
   const [isSharingOpen, setIsSharingOpen] = useState(false);
   const [updatingSettings, setUpdatingSettings] = useState(false);
   const [isMobileChatOpen, setIsMobileChatOpen] = useState(false);
+  const wasDisconnectedRef = useRef(false);
 
   const getInitials = (name: string) => {
     if (!name) return "";
@@ -112,8 +109,10 @@ export default function RoomPage({ params }: PageProps) {
   // Sync authenticated user details
   useEffect(() => {
     if (user) {
-      setUsername(user.username);
-      setShowJoinModal(false);
+      Promise.resolve().then(() => {
+        setUsername(user.username);
+        setShowJoinModal(false);
+      });
     }
   }, [user]);
 
@@ -127,17 +126,15 @@ export default function RoomPage({ params }: PageProps) {
   const monacoRef = useRef<Monaco | null>(null);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const chatEndRef = useRef<HTMLDivElement | null>(null);
-  const userColorRef = useRef<string>("#00f0ff");
+  const [userColor] = useState(() => {
+    const colors = ["#00f0ff", "#a855f7", "#ec4899", "#f59e0b", "#10b981", "#ef4444", "#3b82f6"];
+    return colors[Math.floor(Math.random() * colors.length)];
+  });
+  const userColorRef = useRef<string>(userColor);
 
   // Keep a map of active remote cursors decorations in Monaco
   // remoteDecorations: socketId -> Array of decoration IDs
   const remoteDecorationsRef = useRef<Map<string, string[]>>(new Map());
-
-  // Generate a random color for the user session
-  useEffect(() => {
-    const colors = ["#00f0ff", "#a855f7", "#ec4899", "#f59e0b", "#10b981", "#ef4444", "#3b82f6"];
-    userColorRef.current = colors[Math.floor(Math.random() * colors.length)];
-  }, []);
 
   // Sync client-side scroll to bottom of chat
   useEffect(() => {
@@ -145,6 +142,14 @@ export default function RoomPage({ params }: PageProps) {
   }, [chatMessages]);
 
   const prevUsersRef = useRef<UserPresence[]>([]);
+
+  const showToast = useCallback((message: string) => {
+    if (message.toLowerCase().includes("failed") || message.toLowerCase().includes("error") || message.toLowerCase().includes("protected") || message.toLowerCase().includes("denied") || message.toLowerCase().includes("exists")) {
+      toast.error(message);
+    } else {
+      toast.success(message);
+    }
+  }, []);
 
   useEffect(() => {
     if (prevUsersRef.current.length === 0) {
@@ -168,6 +173,7 @@ export default function RoomPage({ params }: PageProps) {
 
     joined.forEach((u) => {
       if (u.username !== username) {
+        toast.success(`${u.username} joined the room!`, { icon: '👋' });
         systemMsgs.push({
           roomId,
           sender: "System",
@@ -181,6 +187,7 @@ export default function RoomPage({ params }: PageProps) {
 
     left.forEach((u) => {
       if (u.username !== username) {
+        toast(`${u.username} left the room`, { icon: '🚪' });
         systemMsgs.push({
           roomId,
           sender: "System",
@@ -193,7 +200,9 @@ export default function RoomPage({ params }: PageProps) {
     });
 
     if (systemMsgs.length > 0) {
-      setChatMessages((prev) => [...prev, ...systemMsgs]);
+      Promise.resolve().then(() => {
+        setChatMessages((prev) => [...prev, ...systemMsgs]);
+      });
     }
 
     prevUsersRef.current = activeUsers;
@@ -306,17 +315,37 @@ export default function RoomPage({ params }: PageProps) {
     });
 
     // 2. Initialize Socket Connection
+    toast.loading("Connecting to room workspace...", { id: "room-connect" });
     const socket = io(BACKEND_URL);
     socketRef.current = socket;
 
     socket.on("connect", () => {
       console.log("Connected to real-time sync server.");
+      if (wasDisconnectedRef.current) {
+        toast.success("Connection restored!", { id: "room-connect" });
+        wasDisconnectedRef.current = false;
+      } else {
+        toast.success(`Joined room: ${roomId}`, { id: "room-connect" });
+      }
       socket.emit("room:join", { 
         roomId, 
         username, 
         color: userColorRef.current,
         token: localStorage.getItem("devspace_token")
       });
+    });
+
+    socket.on("connect_error", (err) => {
+      console.error("Socket connection error:", err);
+      toast.error("Connection failed. Retrying sync...", { id: "room-connect" });
+    });
+
+    socket.on("disconnect", (reason) => {
+      console.log("Disconnected:", reason);
+      if (reason === "io server disconnect" || reason === "transport close" || reason === "ping timeout") {
+        wasDisconnectedRef.current = true;
+        toast.error("Lost connection to server. Sync paused.", { id: "room-connect" });
+      }
     });
 
     socket.on("room:info", ({ visibility, owner }) => {
@@ -331,6 +360,7 @@ export default function RoomPage({ params }: PageProps) {
 
     socket.on("room:join:error", ({ error }) => {
       setRoomAccessError(error);
+      toast.error(`Access denied: ${error}`, { id: "room-connect" });
     });
 
     // 3. Receive initial full room Yjs update from server
@@ -391,7 +421,7 @@ export default function RoomPage({ params }: PageProps) {
       socket.disconnect();
       ydoc.destroy();
     };
-  }, [username, roomId, BACKEND_URL, updateRemoteCursorDecoration, removeRemoteCursorDecoration]);
+  }, [username, roomId, BACKEND_URL, updateRemoteCursorDecoration, removeRemoteCursorDecoration, showToast]);
 
   const appendConsoleLog = useCallback((type: "log" | "error", text: string) => {
     const time = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
@@ -790,10 +820,7 @@ export default function RoomPage({ params }: PageProps) {
     setTimeout(() => setIsCopied(false), 2000);
   };
 
-  const showToast = (message: string) => {
-    setToastMsg(message);
-    setTimeout(() => setToastMsg(""), 3000);
-  };
+
 
   // Join Room username handler modal
   const handleJoinModalSubmit = (e: React.FormEvent) => {
@@ -836,13 +863,7 @@ export default function RoomPage({ params }: PageProps) {
   return (
     <div className="flex flex-col h-screen bg-background text-foreground overflow-hidden font-sans select-none">
       
-      {/* Toast */}
-      {toastMsg && (
-        <div className="fixed bottom-5 right-5 z-50 flex items-center gap-2 bg-zinc-900 border border-cyan-500/30 text-cyan-200 px-4 py-3 rounded-lg shadow-2xl animate-fade-in font-mono text-xs">
-          <Activity className="w-4 h-4 text-cyan-400 animate-pulse" />
-          <span>{toastMsg}</span>
-        </div>
-      )}
+
 
       {/* Header */}
       <header className="h-14 shrink-0 border-b border-card-border bg-header-bg backdrop-blur-xl flex items-center justify-between px-4 z-10">
@@ -943,7 +964,7 @@ export default function RoomPage({ params }: PageProps) {
                     <label className="text-[9px] uppercase font-bold text-zinc-500 tracking-wider">Workspace Visibility</label>
                     <select
                       value={roomVisibility}
-                      onChange={(e) => handleVisibilityChange(e.target.value as any)}
+                      onChange={(e) => handleVisibilityChange(e.target.value as "public" | "readonly" | "private")}
                       disabled={updatingSettings}
                       className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-2.5 py-1.5 text-xs text-foreground focus:outline-none cursor-pointer"
                     >
@@ -1315,7 +1336,7 @@ export default function RoomPage({ params }: PageProps) {
                         <span className="text-xs font-bold text-cyan-400 font-sans">You</span>
                         <div 
                           className="w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-bold text-zinc-955 uppercase"
-                          style={{ backgroundColor: userColorRef.current }}
+                          style={{ backgroundColor: userColor }}
                         >
                           {getInitials(msg.sender)}
                         </div>

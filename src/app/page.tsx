@@ -4,11 +4,9 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { 
-  Terminal, 
   Users, 
   MessageSquare, 
   Play, 
-  MonitorSmartphone,
   ChevronRight,
   Github,
   ArrowRight,
@@ -29,6 +27,7 @@ import {
 } from "lucide-react";
 import InteractiveEditor from "@/components/InteractiveEditor";
 import { useAuth } from "@/context/AuthContext";
+import { toast } from "react-hot-toast";
 
 export default function Home() {
   const router = useRouter();
@@ -44,10 +43,16 @@ export default function Home() {
   const [modalStep, setModalStep] = useState<"form" | "loading" | "success">("form");
   const [generatedLink, setGeneratedLink] = useState("");
   const [copied, setCopied] = useState(false);
-  const [toastMessage, setToastMessage] = useState("");
   const [theme, setTheme] = useState("dark");
 
-  const [userRooms, setUserRooms] = useState<any[]>([]);
+  interface Room {
+    roomId: string;
+    name: string;
+    visibility: "public" | "readonly" | "private";
+    createdAt: string;
+  }
+
+  const [userRooms, setUserRooms] = useState<Room[]>([]);
   const [loadingRooms, setLoadingRooms] = useState(false);
 
   useEffect(() => {
@@ -59,10 +64,12 @@ export default function Home() {
 
   useEffect(() => {
     if (user) {
-      setRoomCreatorName(user.username);
+      Promise.resolve().then(() => {
+        setRoomCreatorName(user.username);
+        setLoadingRooms(true);
+      });
       
       // Fetch user rooms
-      setLoadingRooms(true);
       fetchWithAuth(`${BACKEND_URL}/api/rooms`)
         .then(res => res.json())
         .then(data => {
@@ -76,8 +83,10 @@ export default function Home() {
           setLoadingRooms(false);
         });
     } else {
-      setUserRooms([]);
-      setRoomCreatorName("");
+      Promise.resolve().then(() => {
+        setUserRooms([]);
+        setRoomCreatorName("");
+      });
     }
   }, [user, BACKEND_URL, fetchWithAuth]);
 
@@ -123,6 +132,7 @@ export default function Home() {
       
       const data = await response.json();
       setGeneratedLink(`${window.location.origin}/room/${data.roomId}`);
+      toast.success("Room created successfully!");
       setModalStep("success");
 
       // Refetch user rooms list if logged in
@@ -150,20 +160,17 @@ export default function Home() {
   };
 
   const showToast = (message: string) => {
-    setToastMessage(message);
-    setTimeout(() => setToastMessage(""), 3000);
+    if (message.toLowerCase().includes("failed") || message.toLowerCase().includes("error")) {
+      toast.error(message);
+    } else {
+      toast.success(message);
+    }
   };
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground overflow-x-hidden selection:bg-cyan-500/30 selection:text-cyan-200">
       
-      {/* Toast Notification */}
-      {toastMessage && (
-        <div className="fixed bottom-5 right-5 z-50 flex items-center gap-2 bg-zinc-900 border border-cyan-500/30 text-cyan-200 px-4 py-3 rounded-lg shadow-2xl animate-fade-in font-mono text-xs">
-          <Sparkles className="w-4 h-4 text-cyan-400 animate-pulse" />
-          <span>{toastMessage}</span>
-        </div>
-      )}
+
 
       {/* Top Banner */}
       <div className="w-full bg-banner-bg border-b border-card-border py-2.5 text-center text-[11px] sm:text-xs font-mono tracking-wide flex items-center justify-center gap-2 px-4 select-none">
@@ -905,7 +912,7 @@ export default function Home() {
                       <label className="text-[10px] uppercase font-bold tracking-wider text-text-muted block font-mono">Room Sharing Visibility</label>
                       <select 
                         value={roomVisibility} 
-                        onChange={(e) => setRoomVisibility(e.target.value as any)}
+                        onChange={(e) => setRoomVisibility(e.target.value as "public" | "readonly" | "private")}
                         className="w-full bg-background border border-card-border focus:border-cyan-500/50 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-cyan-500/30 transition-all font-mono cursor-pointer"
                       >
                         <option value="public">Public (Collaborative Sync)</option>
