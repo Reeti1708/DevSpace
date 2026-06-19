@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState, useEffect, useRef, use, useCallback } from "react";
+import React, { useState, useEffect, useRef, use, useCallback, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { io, Socket } from "socket.io-client";
 import * as Y from "yjs";
+import { MonacoBinding } from "y-monaco";
 import Editor, { Monaco } from "@monaco-editor/react";
 import { 
   Terminal as TerminalIcon, 
@@ -118,6 +119,23 @@ export default function RoomPage({ params }: PageProps) {
 
   const createFileInputRef = useRef<HTMLInputElement | null>(null);
 
+  const isReadOnlyUser = roomVisibility === "readonly" && (!user || user.id !== roomOwnerId);
+
+  const editorOptions = useMemo(() => ({
+    minimap: { enabled: false },
+    fontSize: 14,
+    lineNumbers: "on" as const,
+    scrollbar: { verticalScrollbarSize: 6, horizontalScrollbarSize: 6 },
+    cursorBlinking: "smooth" as const,
+    cursorSmoothCaretAnimation: "on" as const,
+    automaticLayout: true,
+    tabSize: 2,
+    wordWrap: "on" as const,
+    readOnly: isReadOnlyUser,
+    autoIndent: "full" as const,
+    matchBrackets: "always" as const
+  }), [isReadOnlyUser]);
+
   // Refs
   const socketRef = useRef<Socket | null>(null);
   const ydocRef = useRef<Y.Doc | null>(null);
@@ -131,6 +149,8 @@ export default function RoomPage({ params }: PageProps) {
     return colors[Math.floor(Math.random() * colors.length)];
   });
   const userColorRef = useRef<string>(userColor);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const bindingRef = useRef<any>(null);
 
   // Keep a map of active remote cursors decorations in Monaco
   // remoteDecorations: socketId -> Array of decoration IDs
@@ -367,7 +387,7 @@ export default function RoomPage({ params }: PageProps) {
     socket.on("yjs:init", (initBuffer: ArrayBuffer) => {
       try {
         const updateArray = new Uint8Array(initBuffer);
-        Y.applyUpdate(ydoc, updateArray);
+        Y.applyUpdate(ydoc, updateArray, socket);
         // Sync files list immediately after load
         const keys = Array.from(yfiles.keys()) as string[];
         setFilesList(keys);
@@ -380,7 +400,7 @@ export default function RoomPage({ params }: PageProps) {
     socket.on("yjs:update", (updateBuffer: ArrayBuffer) => {
       try {
         const updateArray = new Uint8Array(updateBuffer);
-        Y.applyUpdate(ydoc, updateArray);
+        Y.applyUpdate(ydoc, updateArray, socket);
       } catch (err) {
         console.error("Yjs delta sync error:", err);
       }
@@ -420,6 +440,9 @@ export default function RoomPage({ params }: PageProps) {
     return () => {
       socket.disconnect();
       ydoc.destroy();
+      if (bindingRef.current) {
+        bindingRef.current.destroy();
+      }
     };
   }, [username, roomId, BACKEND_URL, updateRemoteCursorDecoration, removeRemoteCursorDecoration, showToast]);
 
@@ -588,7 +611,7 @@ export default function RoomPage({ params }: PageProps) {
   }, [filesList, activeFileName]);
 
   // Capture local cursor changes to send to socket
-  const handleEditorChange = () => {
+  const handleEditorChange = useCallback(() => {
     if (!editorRef.current || !socketRef.current) return;
     
     const selection = editorRef.current.getSelection();
@@ -600,7 +623,7 @@ export default function RoomPage({ params }: PageProps) {
         endColumn: selection.endColumn
       });
     }
-  };
+  }, []);
 
   const updateEditorModel = useCallback(() => {
     if (!editorRef.current || !monacoRef.current || !ydocRef.current || !activeFileName) return;
@@ -627,33 +650,27 @@ export default function RoomPage({ params }: PageProps) {
 
     if (!model) {
       model = monaco.editor.createModel(yText.toString(), language, monaco.Uri.parse(uriString));
-      
-      // Keep model in sync with Yjs
-      model.onDidChangeContent(() => {
-        const val = model.getValue();
-        if (yText.toString() !== val) {
-          yText.delete(0, yText.length);
-          yText.insert(0, val);
-        }
-      });
-
-      // Keep Yjs in sync with model (peer updates)
-      yText.observe(() => {
-        const val = yText.toString();
-        if (model.getValue() !== val) {
-          const position = editorRef.current.getPosition();
-          model.setValue(val);
-          if (position) editorRef.current.setPosition(position);
-        }
-      });
     }
+
+    // Destroy previous binding if it exists
+    if (bindingRef.current) {
+      bindingRef.current.destroy();
+      bindingRef.current = null;
+    }
+
+    // Create a new binding for this editor and model
+    bindingRef.current = new MonacoBinding(
+      yText,
+      model,
+      new Set([editorRef.current])
+    );
 
     editorRef.current.setModel(model);
   }, [activeFileName]);
 
   // Setup Monaco bindings and listeners
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleEditorDidMount = (editor: any, monaco: Monaco) => {
+  const handleEditorDidMount = useCallback((editor: any, monaco: Monaco) => {
     editorRef.current = editor;
     monacoRef.current = monaco;
 
@@ -663,7 +680,7 @@ export default function RoomPage({ params }: PageProps) {
 
     // Apply the active tab model to Monaco
     updateEditorModel();
-  };
+  }, [handleEditorChange, updateEditorModel]);
 
   // Sync active tab files in Monaco Editor
   useEffect(() => {
@@ -697,7 +714,7 @@ export default function RoomPage({ params }: PageProps) {
     setUpdatingSettings(false);
   };
 
-  const isReadOnlyUser = roomVisibility === "readonly" && (!user || user.id !== roomOwnerId);
+
 
   const handleCreateFileSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -863,10 +880,8 @@ export default function RoomPage({ params }: PageProps) {
   return (
     <div className="flex flex-col h-screen bg-background text-foreground overflow-hidden font-sans select-none">
       
-
-
       {/* Header */}
-      <header className="h-14 shrink-0 border-b border-card-border bg-header-bg backdrop-blur-xl flex items-center justify-between px-4 z-10">
+      <header className="h-14 shrink-0 border-b border-card-border bg-header-bg backdrop-blur-xl flex items-center justify-between px-4 z-50">
         
         {/* Logo and Room Details */}
         <div className="flex items-center gap-3">
@@ -1160,20 +1175,7 @@ export default function RoomPage({ params }: PageProps) {
                   </div>
                 }
                 onMount={handleEditorDidMount}
-                options={{
-                  minimap: { enabled: false },
-                  fontSize: 14,
-                  lineNumbers: "on",
-                  scrollbar: { verticalScrollbarSize: 6, horizontalScrollbarSize: 6 },
-                  cursorBlinking: "smooth",
-                  cursorSmoothCaretAnimation: "on",
-                  automaticLayout: true,
-                  tabSize: 2,
-                  wordWrap: "on",
-                  readOnly: isReadOnlyUser,
-                  autoIndent: "full",
-                  matchBrackets: "always"
-                }}
+                options={editorOptions}
               />
             )}
           </div>
@@ -1272,7 +1274,7 @@ export default function RoomPage({ params }: PageProps) {
       )}
 
       {/* Sidebar: Sockets Chat Panel (Desktop: Sidebar, Mobile: Slide-out drawer) */}
-      <div className={`fixed inset-y-0 right-0 z-40 w-[300px] bg-zinc-955 dark:bg-zinc-950 border-l border-card-border flex flex-col transition-transform duration-300 transform md:relative md:translate-x-0 md:z-10 md:flex ${
+      <div className={`fixed top-14 bottom-0 right-0 z-40 w-[300px] bg-zinc-955 dark:bg-zinc-950 border-l border-card-border flex flex-col transition-transform duration-300 transform md:relative md:top-0 md:translate-x-0 md:z-10 md:flex ${
         isMobileChatOpen ? "translate-x-0" : "translate-x-full"
       }`}>
         
