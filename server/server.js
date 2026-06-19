@@ -11,7 +11,20 @@ import jwt from "jsonwebtoken";
 dotenv.config();
 
 const app = express();
-app.use(cors({ origin: "*" })); // Allow all origins for dev sandbox
+
+const allowedOrigins = process.env.FRONTEND_URL ? process.env.FRONTEND_URL.split(",") : ["*"];
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.indexOf("*") !== -1 || allowedOrigins.indexOf(origin) !== -1 || origin.endsWith(".onrender.com")) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // AUTHENTICATION MIDDLEWARE
@@ -468,10 +481,7 @@ app.get("/api/rooms/:roomId/chats", async (req, res) => {
 // START HTTP + SOCKET.IO SERVER
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST"]
-  }
+  cors: corsOptions
 });
 
 // SOCKET CONNECTION HANDLER

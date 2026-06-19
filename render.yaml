@@ -28,4 +28,4 @@ services:
         fromService:
           name: devspace-backend
           type: web
-          property: host
+          property: url
