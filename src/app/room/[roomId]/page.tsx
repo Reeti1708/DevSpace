@@ -1170,7 +1170,9 @@ export default function RoomPage({ params }: PageProps) {
                   automaticLayout: true,
                   tabSize: 2,
                   wordWrap: "on",
-                  readOnly: isReadOnlyUser
+                  readOnly: isReadOnlyUser,
+                  autoIndent: "full",
+                  matchBrackets: "always"
                 }}
               />
             )}
