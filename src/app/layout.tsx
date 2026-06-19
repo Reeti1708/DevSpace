@@ -16,6 +16,9 @@ const fontMono = Fira_Code({
 export const metadata: Metadata = {
   title: "DevSpace — Real-Time Developer Playground",
   description: "A real-time collaborative code editor platform for developers.",
+  icons: {
+    icon: "/logo.png",
+  },
 };
 
 export default function RootLayout({

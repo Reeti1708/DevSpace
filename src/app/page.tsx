@@ -183,9 +183,12 @@ export default function Home() {
           
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="relative w-8 h-8 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center group-hover:border-cyan-500/50 transition-all duration-300">
-              <Terminal className="h-4.5 w-4.5 text-cyan-400 group-hover:scale-110 transition-transform" />
-              <div className="absolute inset-0 rounded-lg bg-cyan-500/5 blur-sm opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <div className="relative w-8 h-8 rounded-lg overflow-hidden border border-card-border/80 flex items-center justify-center group-hover:border-cyan-500/50 transition-all duration-300">
+              <img 
+                src="/logo.png" 
+                alt="DevSpace Logo" 
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              />
             </div>
             <span className="font-mono text-lg font-bold tracking-tight text-foreground group-hover:text-cyan-300 transition-colors">
               Dev<span className="text-cyan-400">Space</span>
@@ -813,9 +816,13 @@ export default function Home() {
       {/* Footer */}
       <footer className="w-full py-12 border-t border-card-border bg-footer-bg relative z-10 font-mono text-xs text-text-muted">
         <div className="container mx-auto px-4 md:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-md bg-card-bg border border-card-border flex items-center justify-center">
-              <Terminal className="h-4 w-4 text-cyan-400" />
+          <div className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-md overflow-hidden border border-card-border flex items-center justify-center bg-card-bg">
+              <img 
+                src="/logo.png" 
+                alt="DevSpace Logo" 
+                className="w-full h-full object-cover"
+              />
             </div>
             <span className="text-base font-bold text-foreground">DevSpace</span>
           </div>
