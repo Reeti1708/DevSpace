@@ -22,7 +22,8 @@ import {
   Lock,
   ShieldAlert,
   Globe,
-  Eye
+  Eye,
+  X
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
@@ -38,6 +39,7 @@ interface ChatMessage {
   text: string;
   time: string;
   avatarColor: string;
+  isSystem?: boolean;
 }
 
 interface RemoteCursorData {
@@ -96,6 +98,16 @@ export default function RoomPage({ params }: PageProps) {
   const [roomAccessError, setRoomAccessError] = useState<string | null>(null);
   const [isSharingOpen, setIsSharingOpen] = useState(false);
   const [updatingSettings, setUpdatingSettings] = useState(false);
+  const [isMobileChatOpen, setIsMobileChatOpen] = useState(false);
+
+  const getInitials = (name: string) => {
+    if (!name) return "";
+    const parts = name.trim().split(/[\s-_]+/);
+    if (parts.length === 1) {
+      return parts[0].slice(0, 2).toUpperCase();
+    }
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  };
 
   // Sync authenticated user details
   useEffect(() => {
@@ -131,6 +143,61 @@ export default function RoomPage({ params }: PageProps) {
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chatMessages]);
+
+  const prevUsersRef = useRef<UserPresence[]>([]);
+
+  useEffect(() => {
+    if (prevUsersRef.current.length === 0) {
+      if (activeUsers.length > 0) {
+        prevUsersRef.current = activeUsers;
+      }
+      return;
+    }
+
+    const prevUsers = prevUsersRef.current;
+    
+    const joined = activeUsers.filter(
+      (u) => !prevUsers.some((pu) => pu.socketId === u.socketId)
+    );
+    const left = prevUsers.filter(
+      (pu) => !activeUsers.some((u) => u.socketId === pu.socketId)
+    );
+
+    const systemMsgs: ChatMessage[] = [];
+    const time = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+    joined.forEach((u) => {
+      if (u.username !== username) {
+        systemMsgs.push({
+          roomId,
+          sender: "System",
+          text: `${u.username} joined the session`,
+          time,
+          avatarColor: "",
+          isSystem: true
+        });
+      }
+    });
+
+    left.forEach((u) => {
+      if (u.username !== username) {
+        systemMsgs.push({
+          roomId,
+          sender: "System",
+          text: `${u.username} left the session`,
+          time,
+          avatarColor: "",
+          isSystem: true
+        });
+      }
+    });
+
+    if (systemMsgs.length > 0) {
+      setChatMessages((prev) => [...prev, ...systemMsgs]);
+    }
+
+    prevUsersRef.current = activeUsers;
+  }, [activeUsers, username, roomId]);
 
   // Remote cursors drawing in Monaco Editor using decorations
   const updateRemoteCursorDecoration = useCallback((data: RemoteCursorData) => {
@@ -819,6 +886,16 @@ export default function RoomPage({ params }: PageProps) {
             </div>
           </div>
 
+          {/* Mobile Chat Toggle Button */}
+          <button
+            onClick={() => setIsMobileChatOpen(!isMobileChatOpen)}
+            className="h-8 w-8 flex md:hidden items-center justify-center rounded-lg border border-card-border bg-card-bg hover:bg-zinc-800/10 dark:hover:bg-zinc-100/10 text-zinc-400 hover:text-foreground transition-all cursor-pointer relative"
+            title="Toggle Live Chat"
+          >
+            <MessageSquare className="w-4 h-4 text-cyan-400" />
+            <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-cyan-500 rounded-full animate-pulse"></span>
+          </button>
+
           {/* Share & Settings Menu */}
           <div className="relative">
             <button
@@ -1160,62 +1237,126 @@ export default function RoomPage({ params }: PageProps) {
               )}
             </div>
 
-          </div>
         </div>
+      </div>
+      
+      {/* Mobile Chat Backdrop overlay */}
+      {isMobileChatOpen && (
+        <div 
+          className="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm md:hidden"
+          onClick={() => setIsMobileChatOpen(false)}
+        />
+      )}
 
-        {/* Sidebar: Sockets Chat Panel */}
-        <div className="w-[25%] hidden md:flex flex-col bg-zinc-950 w-[300px]">
-          
-          <div className="h-10 shrink-0 border-b border-card-border flex items-center gap-1.5 px-4 font-mono text-xs font-bold text-foreground">
+      {/* Sidebar: Sockets Chat Panel (Desktop: Sidebar, Mobile: Slide-out drawer) */}
+      <div className={`fixed inset-y-0 right-0 z-40 w-[300px] bg-zinc-955 dark:bg-zinc-950 border-l border-card-border flex flex-col transition-transform duration-300 transform md:relative md:translate-x-0 md:z-10 md:flex ${
+        isMobileChatOpen ? "translate-x-0" : "translate-x-full"
+      }`}>
+        
+        <div className="h-10 shrink-0 border-b border-card-border flex items-center justify-between px-4 font-mono text-xs font-bold text-foreground">
+          <div className="flex items-center gap-1.5">
             <MessageSquare className="w-4 h-4 text-cyan-400" />
             <span>Room Live Chat</span>
           </div>
-
-          {/* Chat Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 select-text">
-            {chatMessages.length === 0 ? (
-              <div className="h-full flex flex-col items-center justify-center text-center px-4 select-none">
-                <MessageSquare className="w-8 h-8 text-zinc-700 mb-2" />
-                <span className="text-xs text-zinc-500 font-mono">No messages yet. Start discussing logic!</span>
-              </div>
-            ) : (
-              chatMessages.map((msg, index) => (
-                <div key={index} className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-bold text-zinc-950 capitalize ${msg.avatarColor}`}>
-                      {msg.sender.slice(0, 2)}
-                    </span>
-                    <span className="text-xs font-bold text-foreground font-mono">{msg.sender}</span>
-                    <span className="text-[9px] text-zinc-500 font-mono">{msg.time}</span>
-                  </div>
-                  <p className="text-xs bg-zinc-900 border border-card-border/30 rounded-lg p-2.5 ml-7 text-text-muted leading-relaxed whitespace-pre-wrap break-all">
-                    {msg.text}
-                  </p>
-                </div>
-              ))
-            )}
-            <div ref={chatEndRef} />
-          </div>
-
-          {/* Message Input form */}
-          <form onSubmit={handleSendChat} className="p-3 border-t border-card-border bg-zinc-950 flex gap-2">
-            <input
-              type="text"
-              required
-              placeholder="Discuss code..."
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              className="flex-1 bg-zinc-900 border border-card-border focus:border-cyan-500/50 rounded-lg px-3 py-1.5 text-xs text-foreground focus:outline-none placeholder-zinc-600 transition-colors"
-            />
-            <button
-              type="submit"
-              className="h-8 w-8 bg-cyan-400 hover:bg-cyan-300 text-zinc-950 rounded-lg flex items-center justify-center transition-colors cursor-pointer shrink-0"
-              title="Send message"
-            >
-              <Send className="w-3.5 h-3.5" />
-            </button>
-          </form>
+          {/* Close button for mobile */}
+          <button 
+            onClick={() => setIsMobileChatOpen(false)}
+            className="p-1 hover:bg-zinc-800 rounded text-zinc-500 hover:text-foreground md:hidden transition-colors cursor-pointer border-none bg-transparent"
+            title="Close Chat"
+            type="button"
+          >
+            <X className="w-4 h-4" />
+          </button>
         </div>
+
+        {/* Chat Messages */}
+        <div className="flex-1 overflow-y-auto p-4 space-y-4 select-text">
+          {chatMessages.length === 0 ? (
+            <div className="h-full flex flex-col items-center justify-center text-center px-4 select-none">
+              <MessageSquare className="w-8 h-8 text-zinc-700 mb-2" />
+              <span className="text-xs text-zinc-500 font-mono">No messages yet. Start discussing logic!</span>
+            </div>
+          ) : (
+            chatMessages.map((msg, index) => {
+              if (msg.isSystem) {
+                return (
+                  <div key={index} className="flex items-center justify-center py-1">
+                    <div className="text-[10px] text-zinc-500 font-mono px-3 py-1 bg-zinc-900/35 border border-zinc-900/60 rounded-full flex items-center gap-1.5 select-none">
+                      <span className="w-1.5 h-1.5 bg-cyan-500/50 rounded-full animate-pulse"></span>
+                      <span>{msg.text}</span>
+                      <span className="text-zinc-600 font-normal">•</span>
+                      <span>{msg.time}</span>
+                    </div>
+                  </div>
+                );
+              }
+
+              const isMe = msg.sender === username;
+
+              return (
+                <div key={index} className={`flex flex-col ${isMe ? "items-end" : "items-start"} space-y-1 group`}>
+                  
+                  {/* Header info */}
+                  <div className="flex items-center gap-2 px-1 select-none">
+                    {!isMe && (
+                      <>
+                        <div 
+                          className="w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-bold text-zinc-950 uppercase"
+                          style={{ backgroundColor: msg.avatarColor || "#a855f7" }}
+                        >
+                          {getInitials(msg.sender)}
+                        </div>
+                        <span className="text-xs font-bold text-foreground/90 font-sans">{msg.sender}</span>
+                      </>
+                    )}
+                    <span className="text-[9px] text-zinc-500 font-mono">{msg.time}</span>
+                    {isMe && (
+                      <>
+                        <span className="text-xs font-bold text-cyan-400 font-sans">You</span>
+                        <div 
+                          className="w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-bold text-zinc-955 uppercase"
+                          style={{ backgroundColor: userColorRef.current }}
+                        >
+                          {getInitials(msg.sender)}
+                        </div>
+                      </>
+                    )}
+                  </div>
+
+                  {/* Chat Bubble */}
+                  <div className={`text-xs max-w-[85%] rounded-2xl px-3 py-2.5 leading-relaxed whitespace-pre-wrap break-all shadow-sm ${
+                    isMe 
+                      ? "bg-cyan-950/40 border border-cyan-500/25 text-cyan-100 rounded-tr-sm" 
+                      : "bg-zinc-900/60 border border-zinc-800/80 text-foreground/90 rounded-tl-sm"
+                  }`}>
+                    {msg.text}
+                  </div>
+
+                </div>
+              );
+            }))}
+          <div ref={chatEndRef} />
+        </div>
+
+        {/* Message Input form */}
+        <form onSubmit={handleSendChat} className="p-3 border-t border-card-border bg-zinc-950 flex gap-2">
+          <input
+            type="text"
+            required
+            placeholder="Discuss code..."
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            className="flex-1 bg-zinc-900 border border-card-border focus:border-cyan-500/50 rounded-lg px-3 py-1.5 text-xs text-foreground focus:outline-none placeholder-zinc-600 transition-colors font-sans"
+          />
+          <button
+            type="submit"
+            className="h-8 w-8 bg-cyan-400 hover:bg-cyan-300 text-zinc-950 rounded-lg flex items-center justify-center transition-colors cursor-pointer shrink-0 border-none animate-pulse-slow"
+            title="Send message"
+          >
+            <Send className="w-3.5 h-3.5" />
+          </button>
+        </form>
+      </div>
 
       </div>
 
