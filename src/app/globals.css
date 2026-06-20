@@ -193,4 +193,80 @@ html {
 .ash-9 { width: 4px; height: 4px; left: 45%; animation-duration: 17s; animation-delay: 8s; }
 .ash-10 { width: 3px; height: 3px; left: 75%; animation-duration: 19s; animation-delay: 9s; background: rgba(229, 9, 20, 0.18); }
 
+/* Animated Portal and Lightning Animations */
+@keyframes portal-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 35px rgba(229, 9, 20, 0.5), inset 0 0 25px rgba(10, 80, 255, 0.3);
+  }
+  50% {
+    transform: scale(1.04);
+    box-shadow: 0 0 55px rgba(229, 9, 20, 0.8), inset 0 0 40px rgba(10, 80, 255, 0.5);
+  }
+}
+
+@keyframes portal-rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes lightning-flash {
+  0%, 94%, 96%, 98%, 100% {
+    opacity: 0;
+  }
+  95% {
+    opacity: 0.18;
+  }
+  97% {
+    opacity: 0.08;
+  }
+}
+
+@keyframes spark-flicker-1 {
+  0%, 84%, 86%, 88%, 100% {
+    opacity: 0;
+    transform: scale(0.9) rotate(0deg);
+  }
+  85%, 87% {
+    opacity: 0.95;
+    transform: scale(1.1) rotate(5deg);
+  }
+}
+
+@keyframes spark-flicker-2 {
+  0%, 48%, 50%, 52%, 100% {
+    opacity: 0;
+    transform: scale(0.85) rotate(-15deg);
+  }
+  49%, 51% {
+    opacity: 0.8;
+    transform: scale(1.05) rotate(10deg);
+  }
+}
+
+.animate-portal-pulse {
+  animation: portal-pulse 3s infinite ease-in-out;
+}
+
+.animate-portal-rotate {
+  animation: portal-rotate 18s infinite linear;
+}
+
+.animate-lightning-flash {
+  animation: lightning-flash 6s infinite;
+}
+
+.animate-spark-1 {
+  animation: spark-flicker-1 5s infinite;
+}
+
+.animate-spark-2 {
+  animation: spark-flicker-2 4.2s infinite;
+}
+
+
 

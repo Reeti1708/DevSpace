@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "react-hot-toast";
+import UpsideDownLoader from "@/components/UpsideDownLoader";
 
 // Pure CSS floating ash particles layer
 function FogParticles() {
@@ -114,6 +115,7 @@ export default function RoomPage({ params }: PageProps) {
   const [isSharingOpen, setIsSharingOpen] = useState(false);
   const [updatingSettings, setUpdatingSettings] = useState(false);
   const [isMobileChatOpen, setIsMobileChatOpen] = useState(false);
+  const [loadingWorkspace, setLoadingWorkspace] = useState(true);
   const wasDisconnectedRef = useRef(false);
 
   const getInitials = (name: string) => {
@@ -898,6 +900,9 @@ export default function RoomPage({ params }: PageProps) {
 
   return (
     <div className="flex flex-col h-screen bg-background text-foreground overflow-hidden font-sans select-none relative bg-dot-pattern">
+      {username && loadingWorkspace && (
+        <UpsideDownLoader onComplete={() => setLoadingWorkspace(false)} />
+      )}
       <FogParticles />
       
       {/* Header */}

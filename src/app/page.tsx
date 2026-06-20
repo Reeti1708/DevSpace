@@ -26,6 +26,7 @@ import {
   Loader2
 } from "lucide-react";
 import InteractiveEditor from "@/components/InteractiveEditor";
+import UpsideDownLoader from "@/components/UpsideDownLoader";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "react-hot-toast";
 
@@ -969,16 +970,7 @@ export default function Home() {
 
             {/* Step 2: Loading animation */}
             {modalStep === "loading" && (
-              <div className="p-12 flex flex-col items-center justify-center text-center space-y-4">
-                <div className="relative w-12 h-12">
-                  <span className="absolute inset-0 rounded-full border-2 border-card-border"></span>
-                  <span className="absolute inset-0 rounded-full border-2 border-t-red-650 animate-spin"></span>
-                </div>
-                <div className="space-y-1 pt-2">
-                  <h4 className="text-sm font-bold font-mono text-foreground">Initializing socket workspace...</h4>
-                  <p className="text-[10px] text-text-muted font-mono">Syncing code buffers with Monaco Engine</p>
-                </div>
-              </div>
+              <UpsideDownLoader />
             )}
 
             {/* Step 3: Success state */}
