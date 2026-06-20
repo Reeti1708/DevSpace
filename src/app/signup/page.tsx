@@ -6,6 +6,24 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { Terminal, Lock, Mail, User, ArrowRight, Loader2, AlertCircle } from "lucide-react";
 
+// Pure CSS floating ash particles layer
+function FogParticles() {
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden select-none z-0">
+      <div className="ash-particle ash-1"></div>
+      <div className="ash-particle ash-2"></div>
+      <div className="ash-particle ash-3"></div>
+      <div className="ash-particle ash-4"></div>
+      <div className="ash-particle ash-5"></div>
+      <div className="ash-particle ash-6"></div>
+      <div className="ash-particle ash-7"></div>
+      <div className="ash-particle ash-8"></div>
+      <div className="ash-particle ash-9"></div>
+      <div className="ash-particle ash-10"></div>
+    </div>
+  );
+}
+
 export default function SignupPage() {
   const { signup } = useAuth();
   const router = useRouter();
@@ -46,42 +64,43 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#09090b] text-foreground flex items-center justify-center p-4 relative overflow-hidden select-none font-sans">
+    <div className="min-h-screen bg-black text-foreground flex items-center justify-center p-4 relative overflow-hidden select-none font-retro-serif">
+      <FogParticles />
       
-      {/* Dynamic Background Gradients */}
-      <div className="absolute top-1/4 left-1/4 w-[400px] h-[400px] rounded-full bg-cyan-500/10 blur-3xl -z-10 animate-pulse"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] rounded-full bg-purple-500/10 blur-3xl -z-10 animate-pulse" style={{ animationDelay: "1.5s" }}></div>
+      {/* Dynamic Background Gradients - Deep cold blue & dark red */}
+      <div className="absolute top-1/4 left-1/4 w-[400px] h-[400px] rounded-full bg-red-955/10 blur-3xl -z-10 animate-pulse"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] rounded-full bg-blue-955/10 blur-3xl -z-10 animate-pulse" style={{ animationDelay: "1.5s" }}></div>
 
       {/* Signup Card */}
-      <div className="w-full max-w-md bg-zinc-950/70 border border-zinc-800/60 backdrop-blur-xl rounded-2xl p-8 shadow-2xl relative">
+      <div className="w-full max-w-md bg-zinc-950/80 border border-red-955/30 backdrop-blur-xl rounded-2xl p-8 shadow-2xl relative glow-red">
         
         {/* Brand Header */}
-        <div className="flex flex-col items-center text-center mb-8">
-          <Link href="/" className="flex items-center gap-2 group mb-3">
-            <div className="w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center group-hover:border-cyan-500/50 transition-all duration-300">
-              <Terminal className="h-5 w-5 text-cyan-400 group-hover:scale-110 transition-transform" />
+        <div className="flex flex-col items-center text-center mb-8 relative z-10">
+          <Link href="/" className="flex items-center gap-3 group mb-4">
+            <div className="w-10 h-10 rounded-xl bg-red-955/20 border border-red-500/30 flex items-center justify-center group-hover:border-red-500/50 transition-all duration-300 glow-red">
+              <Terminal className="h-5 w-5 text-red-500 group-hover:scale-110 transition-transform glow-text-red" />
             </div>
-            <span className="font-mono text-xl font-bold tracking-tight text-foreground">
-              Dev<span className="text-cyan-400">Space</span>
+            <span className="font-stranger text-2xl font-bold tracking-wider text-red-500 glow-text-red">
+              DEVSPACE
             </span>
           </Link>
-          <h2 className="text-xl font-bold font-mono">Create Account</h2>
-          <p className="text-zinc-500 text-xs mt-1">Get started with a free collaborative playground account</p>
+          <h2 className="text-xl font-bold font-stranger uppercase tracking-wider text-zinc-300">Create Account</h2>
+          <p className="text-zinc-555 text-xs mt-1 font-retro-serif">Get started with a free collaborative playground account</p>
         </div>
 
         {/* Form Error Banner */}
         {error && (
-          <div className="mb-6 p-3 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs flex items-center gap-2 font-mono">
-            <AlertCircle className="w-4 h-4 shrink-0" />
+          <div className="mb-6 p-3 rounded-lg bg-red-955/10 border border-red-500/20 text-red-400 text-xs flex items-center gap-2 font-mono relative z-10">
+            <AlertCircle className="w-4 h-4 shrink-0 text-red-500 glow-text-red" />
             <span>{error}</span>
           </div>
         )}
 
         {/* Input Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 relative z-10">
           <div className="space-y-1.5">
-            <label className="text-[10px] uppercase font-bold tracking-wider text-zinc-500 font-mono flex items-center gap-1">
-              <User className="w-3 h-3 text-cyan-400/80" />
+            <label className="text-[10px] uppercase font-bold tracking-wider text-zinc-500 font-retro-serif flex items-center gap-1.5">
+              <User className="w-3.5 h-3.5 text-red-500" />
               <span>Username</span>
             </label>
             <input
@@ -90,13 +109,13 @@ export default function SignupPage() {
               placeholder="e.g. janesmith"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full bg-zinc-900/40 border border-zinc-800/80 focus:border-cyan-500/50 rounded-lg px-3.5 py-2 text-sm text-foreground focus:outline-none placeholder-zinc-650 transition-colors font-sans"
+              className="w-full bg-zinc-900/60 border border-red-955/20 focus:border-red-500/50 rounded-lg px-3.5 py-2 text-sm text-foreground focus:outline-none placeholder-zinc-650 transition-colors font-sans"
             />
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-[10px] uppercase font-bold tracking-wider text-zinc-500 font-mono flex items-center gap-1">
-              <Mail className="w-3 h-3 text-cyan-400/80" />
+            <label className="text-[10px] uppercase font-bold tracking-wider text-zinc-500 font-retro-serif flex items-center gap-1.5">
+              <Mail className="w-3.5 h-3.5 text-red-500" />
               <span>Email Address</span>
             </label>
             <input
@@ -105,13 +124,13 @@ export default function SignupPage() {
               placeholder="jane.smith@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-zinc-900/40 border border-zinc-800/80 focus:border-cyan-500/50 rounded-lg px-3.5 py-2 text-sm text-foreground focus:outline-none placeholder-zinc-650 transition-colors font-sans"
+              className="w-full bg-zinc-900/60 border border-red-955/20 focus:border-red-500/50 rounded-lg px-3.5 py-2 text-sm text-foreground focus:outline-none placeholder-zinc-650 transition-colors font-sans"
             />
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-[10px] uppercase font-bold tracking-wider text-zinc-500 font-mono flex items-center gap-1">
-              <Lock className="w-3 h-3 text-cyan-400/80" />
+            <label className="text-[10px] uppercase font-bold tracking-wider text-zinc-555 font-retro-serif flex items-center gap-1.5">
+              <Lock className="w-3.5 h-3.5 text-red-500" />
               <span>Password</span>
             </label>
             <input
@@ -120,14 +139,14 @@ export default function SignupPage() {
               placeholder="Minimum 6 characters"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-zinc-900/40 border border-zinc-800/80 focus:border-cyan-500/50 rounded-lg px-3.5 py-2 text-sm text-foreground focus:outline-none placeholder-zinc-650 transition-colors font-sans"
+              className="w-full bg-zinc-900/60 border border-red-955/20 focus:border-red-500/50 rounded-lg px-3.5 py-2 text-sm text-foreground focus:outline-none placeholder-zinc-650 transition-colors font-sans"
             />
           </div>
 
           <button
             type="submit"
             disabled={submitting}
-            className="w-full h-11 inline-flex items-center justify-center rounded-xl bg-cyan-400 hover:bg-cyan-350 disabled:bg-zinc-800 font-mono font-bold text-xs text-zinc-950 disabled:text-zinc-600 transition-colors cursor-pointer mt-4"
+            className="w-full h-11 inline-flex items-center justify-center rounded-xl bg-red-955 hover:bg-red-900 disabled:bg-zinc-900 font-stranger tracking-wider uppercase text-xs text-white disabled:text-zinc-600 transition-colors cursor-pointer mt-4 glow-red border border-red-500/30"
           >
             {submitting ? (
               <>
@@ -144,9 +163,9 @@ export default function SignupPage() {
         </form>
 
         {/* Redirect CTA */}
-        <div className="mt-8 pt-6 border-t border-zinc-900/80 text-center text-xs text-zinc-500 font-mono">
+        <div className="mt-8 pt-6 border-t border-zinc-900/80 text-center text-xs text-zinc-555 font-retro-serif relative z-10">
           Already have an account?{" "}
-          <Link href="/login" className="text-cyan-400 hover:text-cyan-300 underline font-bold transition-colors">
+          <Link href="/login" className="text-red-500 hover:text-red-400 underline font-bold transition-colors">
             Login here
           </Link>
         </div>

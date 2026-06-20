@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Fira_Code } from "next/font/google";
+import { Inter, Fira_Code, Cinzel, Creepster, Lora } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { Toaster } from "react-hot-toast";
@@ -12,6 +12,24 @@ const fontSans = Inter({
 const fontMono = Fira_Code({
   variable: "--font-fira-code",
   subsets: ["latin"],
+});
+
+const fontStranger = Cinzel({
+  variable: "--font-stranger",
+  subsets: ["latin"],
+  weight: ["400", "700", "900"],
+});
+
+const fontSpooky = Creepster({
+  variable: "--font-spooky",
+  subsets: ["latin"],
+  weight: "400",
+});
+
+const fontRetroSerif = Lora({
+  variable: "--font-retro-serif",
+  subsets: ["latin"],
+  weight: ["400", "700"],
 });
 
 export const metadata: Metadata = {
@@ -30,7 +48,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${fontSans.variable} ${fontMono.variable} antialiased dark`}
+      className={`${fontSans.variable} ${fontMono.variable} ${fontStranger.variable} ${fontSpooky.variable} ${fontRetroSerif.variable} antialiased dark`}
     >
       <body className="min-h-screen flex flex-col font-sans bg-background text-foreground overflow-x-hidden">
         <AuthProvider>

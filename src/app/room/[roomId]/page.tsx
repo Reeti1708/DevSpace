@@ -25,6 +25,24 @@ import {
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "react-hot-toast";
 
+// Pure CSS floating ash particles layer
+function FogParticles() {
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden select-none z-0">
+      <div className="ash-particle ash-1"></div>
+      <div className="ash-particle ash-2"></div>
+      <div className="ash-particle ash-3"></div>
+      <div className="ash-particle ash-4"></div>
+      <div className="ash-particle ash-5"></div>
+      <div className="ash-particle ash-6"></div>
+      <div className="ash-particle ash-7"></div>
+      <div className="ash-particle ash-8"></div>
+      <div className="ash-particle ash-9"></div>
+      <div className="ash-particle ash-10"></div>
+    </div>
+  );
+}
+
 interface UserPresence {
   socketId: string;
   username: string;
@@ -846,28 +864,29 @@ export default function RoomPage({ params }: PageProps) {
     setUsername(inputName.trim());
     setShowJoinModal(false);
   };
-
+  
   if (roomAccessError) {
     return (
-      <div className="min-h-screen bg-[#09090b] text-foreground flex items-center justify-center p-4 relative overflow-hidden select-none font-sans">
-        <div className="absolute top-1/4 left-1/4 w-[350px] h-[350px] rounded-full bg-rose-500/5 blur-3xl -z-10 animate-pulse"></div>
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center p-4 relative overflow-hidden select-none font-sans">
+        <FogParticles />
+        <div className="absolute top-1/4 left-1/4 w-[350px] h-[350px] rounded-full bg-red-900/5 blur-3xl -z-10 animate-pulse"></div>
         
-        <div className="w-full max-w-sm bg-zinc-950/70 border border-zinc-800/80 backdrop-blur-xl rounded-2xl p-6 shadow-2xl text-center space-y-5">
-          <Lock className="w-10 h-10 text-rose-550 text-rose-500 mx-auto mb-2" />
-          <h3 className="text-base font-bold text-foreground font-mono">Access Restricted</h3>
-          <p className="text-zinc-500 text-xs leading-relaxed">
+        <div className="w-full max-w-sm bg-card-bg border border-card-border backdrop-blur-xl rounded-2xl p-6 shadow-2xl text-center space-y-5 relative z-10 hover:shadow-[0_0_15px_rgba(229,9,20,0.15)] transition-all duration-300">
+          <Lock className="w-10 h-10 text-red-655 mx-auto mb-2" />
+          <h3 className="text-base font-bold text-foreground font-stranger uppercase tracking-wider">Access Restricted</h3>
+          <p className="text-text-muted text-xs leading-relaxed font-retro-serif">
             {roomAccessError}
           </p>
           <div className="flex gap-3 pt-2">
             <button
               onClick={() => router.push("/login")}
-              className="flex-1 h-10 inline-flex items-center justify-center rounded-xl bg-cyan-400 font-mono font-bold text-xs text-zinc-950 hover:bg-cyan-350 transition-colors cursor-pointer"
+              className="flex-1 h-10 inline-flex items-center justify-center rounded-xl bg-red-655 font-mono font-bold text-xs text-white border border-red-700/50 hover:bg-red-600 transition-colors cursor-pointer glow-red"
             >
               Sign In
             </button>
             <button
               onClick={() => router.push("/")}
-              className="px-4 h-10 border border-zinc-800 hover:bg-zinc-900 rounded-xl text-xs font-mono font-medium text-zinc-400 hover:text-foreground transition-colors cursor-pointer"
+              className="px-4 h-10 border border-card-border hover:bg-zinc-800/10 dark:hover:bg-zinc-100/10 rounded-xl text-xs font-mono font-medium text-text-muted hover:text-foreground transition-colors cursor-pointer"
             >
               Go Home
             </button>
@@ -878,7 +897,8 @@ export default function RoomPage({ params }: PageProps) {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-background text-foreground overflow-hidden font-sans select-none">
+    <div className="flex flex-col h-screen bg-background text-foreground overflow-hidden font-sans select-none relative bg-dot-pattern">
+      <FogParticles />
       
       {/* Header */}
       <header className="h-14 shrink-0 border-b border-card-border bg-header-bg backdrop-blur-xl flex items-center justify-between px-4 z-50">
@@ -887,7 +907,7 @@ export default function RoomPage({ params }: PageProps) {
         <div className="flex items-center gap-3">
           <button 
             onClick={() => router.push("/")}
-            className="p-1.5 hover:bg-zinc-800/20 rounded-lg text-text-muted hover:text-foreground transition-all cursor-pointer"
+            className="p-1.5 hover:bg-red-950/20 rounded-lg text-text-muted hover:text-red-500 transition-all cursor-pointer border border-transparent hover:border-red-950/30"
             title="Leave Room"
           >
             <ChevronLeft className="w-5 h-5" />
@@ -896,8 +916,8 @@ export default function RoomPage({ params }: PageProps) {
           <div className="h-4 w-[1px] bg-card-border"></div>
           
           <div className="flex items-center gap-2">
-            <span className="font-mono text-xs text-text-muted uppercase tracking-wider">Room:</span>
-            <span className="font-mono text-sm font-bold text-foreground bg-zinc-900/60 px-2 py-0.5 rounded border border-card-border">{roomId}</span>
+            <span className="font-stranger text-[11px] font-bold text-text-muted uppercase tracking-wider">Room:</span>
+            <span className="font-mono text-sm font-bold text-red-500 bg-black/60 px-2 py-0.5 rounded border border-red-955/30 glow-text-red">{roomId}</span>
           </div>
         </div>
 
@@ -905,8 +925,8 @@ export default function RoomPage({ params }: PageProps) {
         <div className="flex items-center gap-4">
           
           {/* User list presence */}
-          <div className="hidden sm:flex items-center gap-1.5 bg-zinc-900/40 px-2.5 py-1 rounded-full border border-card-border">
-            <Users className="w-3.5 h-3.5 text-cyan-400" />
+          <div className="hidden sm:flex items-center gap-1.5 bg-red-950/10 px-2.5 py-1 rounded-full border border-card-border">
+            <Users className="w-3.5 h-3.5 text-red-550" />
             <span className="text-xs font-mono text-text-muted mr-1.5">{activeUsers.length}</span>
             <div className="flex -space-x-1.5 overflow-hidden">
               {activeUsers.map((user) => (
@@ -925,25 +945,25 @@ export default function RoomPage({ params }: PageProps) {
           {/* Mobile Chat Toggle Button */}
           <button
             onClick={() => setIsMobileChatOpen(!isMobileChatOpen)}
-            className="h-8 w-8 flex md:hidden items-center justify-center rounded-lg border border-card-border bg-card-bg hover:bg-zinc-800/10 dark:hover:bg-zinc-100/10 text-zinc-400 hover:text-foreground transition-all cursor-pointer relative"
+            className="h-8 w-8 flex md:hidden items-center justify-center rounded-lg border border-card-border bg-card-bg hover:bg-red-950/10 text-zinc-400 hover:text-red-500 transition-all cursor-pointer relative"
             title="Toggle Live Chat"
           >
-            <MessageSquare className="w-4 h-4 text-cyan-400" />
-            <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-cyan-500 rounded-full animate-pulse"></span>
+            <MessageSquare className="w-4 h-4 text-red-550" />
+            <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-red-650 rounded-full animate-pulse"></span>
           </button>
 
           {/* Share & Settings Menu */}
           <div className="relative">
             <button
               onClick={() => setIsSharingOpen(!isSharingOpen)}
-              className="h-8 inline-flex items-center gap-1.5 rounded-lg border border-card-border bg-card-bg hover:bg-zinc-800/10 dark:hover:bg-zinc-100/10 px-3 text-xs font-mono font-medium transition-colors cursor-pointer"
+              className="h-8 inline-flex items-center gap-1.5 rounded-lg border border-card-border bg-card-bg hover:bg-red-950/10 px-3 text-xs font-mono font-medium transition-colors cursor-pointer"
             >
-              <Copy className="w-3.5 h-3.5 text-cyan-400" />
+              <Copy className="w-3.5 h-3.5 text-red-550" />
               <span className="hidden md:inline">Share & Settings</span>
             </button>
             
             {isSharingOpen && (
-              <div className="absolute right-0 mt-2 w-72 bg-zinc-950 border border-card-border rounded-xl shadow-2xl p-4 z-50 font-mono text-xs text-left animate-fade-in space-y-4">
+              <div className="absolute right-0 mt-2 w-72 bg-zinc-955 border border-card-border rounded-xl shadow-2xl p-4 z-50 font-mono text-xs text-left animate-fade-in space-y-4">
                 <div className="flex justify-between items-center pb-2 border-b border-zinc-900">
                   <span className="font-bold text-foreground">Workspace Sharing</span>
                   <button 
@@ -962,7 +982,7 @@ export default function RoomPage({ params }: PageProps) {
                       type="text" 
                       readOnly 
                       value={typeof window !== "undefined" ? `${window.location.origin}/room/${roomId}` : ""}
-                      className="w-full bg-transparent px-2 text-[10px] text-cyan-400 focus:outline-none selection:bg-cyan-500/20"
+                      className="w-full bg-transparent px-2 text-[10px] text-red-500 focus:outline-none selection:bg-red-500/20"
                     />
                     <button
                       onClick={handleCopyLink}
@@ -991,7 +1011,7 @@ export default function RoomPage({ params }: PageProps) {
                 ) : (
                   <div className="pt-2 border-t border-zinc-900 text-[10px] text-zinc-500 flex justify-between">
                     <span>Access Level: </span>
-                    <span className="text-cyan-400 font-bold uppercase">{roomVisibility}</span>
+                    <span className="text-red-550 font-bold uppercase">{roomVisibility}</span>
                   </div>
                 )}
               </div>
@@ -1019,14 +1039,14 @@ export default function RoomPage({ params }: PageProps) {
         <div className="w-56 sm:w-64 bg-zinc-950 border-r border-card-border flex flex-col shrink-0 select-none">
           {/* Header */}
           <div className="h-10 shrink-0 border-b border-card-border flex items-center justify-between px-3 select-none">
-            <span className="font-mono text-[10px] font-bold text-zinc-500 tracking-wider uppercase flex items-center gap-1.5">
-              <Folder className="w-3.5 h-3.5 text-cyan-400" />
+            <span className="font-stranger text-[11px] font-bold text-zinc-500 tracking-wider uppercase flex items-center gap-1.5">
+              <Folder className="w-3.5 h-3.5 text-red-550" />
               <span>Workspace Files</span>
             </span>
             {!isReadOnlyUser && (
               <button
                 onClick={() => setIsCreatingFile(true)}
-                className="p-1 hover:bg-zinc-800 rounded text-zinc-400 hover:text-cyan-400 transition-colors cursor-pointer"
+                className="p-1 hover:bg-red-950/10 rounded text-zinc-400 hover:text-red-500 transition-colors cursor-pointer"
                 title="New File"
               >
                 <Plus className="w-3.5 h-3.5" />
@@ -1037,7 +1057,7 @@ export default function RoomPage({ params }: PageProps) {
           {/* New File Inline Form */}
           {isCreatingFile && (
             <form onSubmit={handleCreateFileSubmit} className="p-2 bg-zinc-900 border-b border-card-border flex items-center gap-1.5 animate-fade-in">
-              <FileCode className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+              <FileCode className="w-3.5 h-3.5 text-red-555 shrink-0" />
               <input
                 ref={createFileInputRef}
                 type="text"
@@ -1050,7 +1070,7 @@ export default function RoomPage({ params }: PageProps) {
                   }, 150);
                 }}
                 placeholder="filename.html"
-                className="bg-transparent border-none focus:outline-none text-xs font-mono w-full text-foreground placeholder-zinc-600"
+                className="bg-transparent border-none focus:outline-none text-xs font-mono w-full text-foreground placeholder-zinc-650"
               />
             </form>
           )}
@@ -1068,7 +1088,7 @@ export default function RoomPage({ params }: PageProps) {
                 const isJson = fileName.endsWith(".json");
                 
                 let iconColor = "text-zinc-400";
-                if (isHtml) iconColor = "text-orange-500";
+                if (isHtml) iconColor = "text-red-500";
                 else if (isCss) iconColor = "text-blue-400";
                 else if (isJs) iconColor = "text-yellow-500";
                 else if (isJson) iconColor = "text-purple-400";
@@ -1078,8 +1098,8 @@ export default function RoomPage({ params }: PageProps) {
                     key={fileName}
                     className={`group flex items-center justify-between px-3 py-1.5 mx-1.5 my-0.5 rounded-lg text-xs font-mono transition-all duration-200 cursor-pointer ${
                       isSelected 
-                        ? "bg-zinc-800/80 text-cyan-400 border border-cyan-500/20 shadow-lg shadow-cyan-500/5 font-bold" 
-                        : "text-text-muted hover:bg-zinc-900/60 hover:text-foreground border border-transparent"
+                        ? "bg-red-950/20 text-red-500 border border-red-500/30 shadow-lg shadow-red-500/5 font-bold font-stranger uppercase tracking-wider" 
+                        : "text-text-muted hover:bg-zinc-900/60 hover:text-foreground border border-transparent font-retro-serif"
                     }`}
                     onClick={() => {
                       if (renamingFileName !== fileName) {
@@ -1102,7 +1122,7 @@ export default function RoomPage({ params }: PageProps) {
                             value={renameInputVal}
                             onChange={(e) => setRenameInputVal(e.target.value)}
                             onBlur={() => setRenamingFileName(null)}
-                            className="bg-zinc-900 border border-cyan-500/30 rounded px-1 py-0.5 text-xs font-mono text-foreground focus:outline-none w-full"
+                            className="bg-zinc-900 border border-red-550/30 rounded px-1 py-0.5 text-xs font-mono text-foreground focus:outline-none w-full"
                             autoFocus
                           />
                         </form>
@@ -1119,7 +1139,7 @@ export default function RoomPage({ params }: PageProps) {
                             setRenamingFileName(fileName);
                             setRenameInputVal(fileName);
                           }}
-                          className="p-0.5 hover:bg-zinc-800 rounded text-zinc-500 hover:text-cyan-400 transition-colors"
+                          className="p-0.5 hover:bg-red-950/20 rounded text-zinc-500 hover:text-red-500 transition-colors"
                           title="Rename File"
                         >
                           <Edit3 className="w-3 h-3" />
@@ -1127,7 +1147,7 @@ export default function RoomPage({ params }: PageProps) {
                         {fileName !== "index.html" && (
                           <button
                             onClick={() => handleDeleteFile(fileName)}
-                            className="p-0.5 hover:bg-zinc-800 rounded text-zinc-500 hover:text-rose-400 transition-colors"
+                            className="p-0.5 hover:bg-red-950/20 rounded text-zinc-500 hover:text-rose-455 transition-colors"
                             title="Delete File"
                           >
                             <Trash2 className="w-3 h-3" />
@@ -1145,20 +1165,20 @@ export default function RoomPage({ params }: PageProps) {
         {/* Right Side: Monaco Editor Workspace */}
         <div className="flex-1 flex flex-col min-w-0">
           {/* File Header Info tab status */}
-          <div className="h-10 shrink-0 bg-zinc-950 border-b border-card-border flex items-center justify-between px-4 select-none">
+          <div className="h-10 shrink-0 bg-zinc-955 border-b border-card-border flex items-center justify-between px-4 select-none">
             <div className="flex items-center gap-2 font-mono text-xs text-foreground">
-              <span className="text-zinc-500">Editing:</span>
-              <span className="font-bold text-cyan-400 bg-zinc-900/60 px-2.5 py-1 rounded border border-card-border">{activeFileName}</span>
+              <span className="text-zinc-500 font-retro-serif">Editing:</span>
+              <span className="font-bold text-red-500 bg-black/60 px-2.5 py-1 rounded border border-red-955/30 glow-text-red">{activeFileName}</span>
             </div>
             
             <div className="text-[10px] font-mono text-zinc-500 flex items-center gap-1">
-              <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping"></span>
-              <span>Syncing Live</span>
+              <span className="w-1.5 h-1.5 bg-red-600 rounded-full animate-ping"></span>
+              <span className="font-retro-serif">Syncing Live</span>
             </div>
           </div>
 
           {/* Monaco Editor Wrapper */}
-          <div className="flex-1 bg-zinc-950 relative">
+          <div className="flex-1 bg-zinc-950 relative border border-red-950/30 shadow-[0_0_30px_rgba(229,9,20,0.12)]">
             {!username ? (
               <div className="absolute inset-0 flex items-center justify-center text-text-muted text-xs font-mono">
                 Waiting for workspace authentication...
@@ -1170,7 +1190,7 @@ export default function RoomPage({ params }: PageProps) {
                 theme={editorTheme}
                 loading={
                   <div className="flex flex-col items-center gap-2">
-                    <span className="w-6 h-6 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin"></span>
+                    <span className="w-6 h-6 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></span>
                     <span className="font-mono text-xs text-text-muted">Loading Monaco...</span>
                   </div>
                 }
@@ -1189,26 +1209,26 @@ export default function RoomPage({ params }: PageProps) {
             <div className="flex gap-2">
               <button 
                 onClick={() => setRightPanelTab("preview")}
-                className={`px-3 py-1 rounded-md text-xs font-mono transition-all cursor-pointer ${
+                className={`px-3 py-1 rounded-md text-xs transition-all cursor-pointer ${
                   rightPanelTab === "preview" 
-                    ? "bg-zinc-800 text-cyan-400 border border-card-border" 
-                    : "text-text-muted hover:text-foreground"
+                    ? "bg-red-950/20 text-red-550 border border-red-550/30 glow-red font-stranger uppercase tracking-wider" 
+                    : "text-text-muted hover:text-foreground font-retro-serif font-medium"
                 }`}
               >
                 Sandbox Preview
               </button>
               <button 
                 onClick={() => setRightPanelTab("console")}
-                className={`px-3 py-1 rounded-md text-xs font-mono transition-all cursor-pointer flex items-center gap-1.5 ${
+                className={`px-3 py-1 rounded-md text-xs transition-all cursor-pointer flex items-center gap-1.5 ${
                   rightPanelTab === "console" 
-                    ? "bg-zinc-800 text-cyan-400 border border-card-border" 
-                    : "text-text-muted hover:text-foreground"
+                    ? "bg-red-950/20 text-red-550 border border-red-550/30 glow-red font-stranger uppercase tracking-wider" 
+                    : "text-text-muted hover:text-foreground font-retro-serif font-medium"
                 }`}
               >
                 <TerminalIcon className="w-3.5 h-3.5" />
                 <span>Console Terminal</span>
                 {consoleLogs.filter(l => l.type === "error").length > 0 && (
-                  <span className="px-1 bg-rose-500 text-white rounded-[4px] text-[8px] font-bold">
+                  <span className="px-1 bg-red-600 text-white rounded-[4px] text-[8px] font-bold">
                     {consoleLogs.filter(l => l.type === "error").length}
                   </span>
                 )}
@@ -1218,7 +1238,7 @@ export default function RoomPage({ params }: PageProps) {
             {rightPanelTab === "console" && consoleLogs.length > 0 && (
               <button 
                 onClick={() => setConsoleLogs([])}
-                className="text-[10px] font-mono text-zinc-500 hover:text-zinc-300 underline cursor-pointer"
+                className="text-[10px] font-mono text-red-500 hover:text-red-400 underline cursor-pointer"
               >
                 Clear logs
               </button>
@@ -1243,7 +1263,7 @@ export default function RoomPage({ params }: PageProps) {
               rightPanelTab === "console" ? "block" : "hidden"
             }`}>
               {consoleLogs.length === 0 ? (
-                <div className="text-zinc-600 text-center pt-10 select-none">
+                <div className="text-zinc-500 text-center pt-10 select-none font-retro-serif">
                   Console is empty. logs and errors will be routed here.
                 </div>
               ) : (
@@ -1262,8 +1282,8 @@ export default function RoomPage({ params }: PageProps) {
               )}
             </div>
 
+          </div>
         </div>
-      </div>
       
       {/* Mobile Chat Backdrop overlay */}
       {isMobileChatOpen && (
@@ -1272,7 +1292,6 @@ export default function RoomPage({ params }: PageProps) {
           onClick={() => setIsMobileChatOpen(false)}
         />
       )}
-
       {/* Sidebar: Sockets Chat Panel (Desktop: Sidebar, Mobile: Slide-out drawer) */}
       <div className={`fixed top-14 bottom-0 right-0 z-40 w-[300px] bg-zinc-955 dark:bg-zinc-950 border-l border-card-border flex flex-col transition-transform duration-300 transform md:relative md:top-0 md:translate-x-0 md:z-10 md:flex ${
         isMobileChatOpen ? "translate-x-0" : "translate-x-full"
@@ -1280,13 +1299,13 @@ export default function RoomPage({ params }: PageProps) {
         
         <div className="h-10 shrink-0 border-b border-card-border flex items-center justify-between px-4 font-mono text-xs font-bold text-foreground">
           <div className="flex items-center gap-1.5">
-            <MessageSquare className="w-4 h-4 text-cyan-400" />
-            <span>Room Live Chat</span>
+            <MessageSquare className="w-4 h-4 text-red-550 glow-text-red" />
+            <span className="font-stranger uppercase tracking-wider text-[11px] text-zinc-400">Room Live Chat</span>
           </div>
           {/* Close button for mobile */}
           <button 
             onClick={() => setIsMobileChatOpen(false)}
-            className="p-1 hover:bg-zinc-800 rounded text-zinc-500 hover:text-foreground md:hidden transition-colors cursor-pointer border-none bg-transparent"
+            className="p-1 hover:bg-red-950/20 rounded text-zinc-550 hover:text-red-500 md:hidden transition-colors cursor-pointer border-none bg-transparent"
             title="Close Chat"
             type="button"
           >
@@ -1298,18 +1317,18 @@ export default function RoomPage({ params }: PageProps) {
         <div className="flex-1 overflow-y-auto p-4 space-y-4 select-text">
           {chatMessages.length === 0 ? (
             <div className="h-full flex flex-col items-center justify-center text-center px-4 select-none">
-              <MessageSquare className="w-8 h-8 text-zinc-700 mb-2" />
-              <span className="text-xs text-zinc-500 font-mono">No messages yet. Start discussing logic!</span>
+              <MessageSquare className="w-8 h-8 text-zinc-800 mb-2 animate-pulse-slow" />
+              <span className="text-xs text-zinc-550 font-retro-serif">No messages yet. Start discussing logic!</span>
             </div>
           ) : (
             chatMessages.map((msg, index) => {
               if (msg.isSystem) {
                 return (
                   <div key={index} className="flex items-center justify-center py-1">
-                    <div className="text-[10px] text-zinc-500 font-mono px-3 py-1 bg-zinc-900/35 border border-zinc-900/60 rounded-full flex items-center gap-1.5 select-none">
-                      <span className="w-1.5 h-1.5 bg-cyan-500/50 rounded-full animate-pulse"></span>
-                      <span>{msg.text}</span>
-                      <span className="text-zinc-600 font-normal">•</span>
+                    <div className="text-[10px] text-zinc-500 font-mono px-3 py-1 bg-red-950/10 border border-red-950/30 rounded-full flex items-center gap-1.5 select-none">
+                      <span className="w-1.5 h-1.5 bg-red-500/50 rounded-full animate-pulse"></span>
+                      <span className="font-retro-serif text-zinc-400">{msg.text}</span>
+                      <span className="text-zinc-650 font-normal">•</span>
                       <span>{msg.time}</span>
                     </div>
                   </div>
@@ -1331,13 +1350,13 @@ export default function RoomPage({ params }: PageProps) {
                         >
                           {getInitials(msg.sender)}
                         </div>
-                        <span className="text-xs font-bold text-foreground/90 font-sans">{msg.sender}</span>
+                        <span className="text-xs font-bold text-foreground/90 font-retro-serif">{msg.sender}</span>
                       </>
                     )}
                     <span className="text-[9px] text-zinc-500 font-mono">{msg.time}</span>
                     {isMe && (
                       <>
-                        <span className="text-xs font-bold text-cyan-400 font-sans">You</span>
+                        <span className="text-xs font-bold text-red-500 font-retro-serif">You</span>
                         <div 
                           className="w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-bold text-zinc-955 uppercase"
                           style={{ backgroundColor: userColor }}
@@ -1351,7 +1370,7 @@ export default function RoomPage({ params }: PageProps) {
                   {/* Chat Bubble */}
                   <div className={`text-xs max-w-[85%] rounded-2xl px-3 py-2.5 leading-relaxed whitespace-pre-wrap break-all shadow-sm ${
                     isMe 
-                      ? "bg-cyan-950/40 border border-cyan-500/25 text-cyan-100 rounded-tr-sm" 
+                      ? "bg-red-950/20 border border-red-500/30 text-red-100 rounded-tr-sm glow-red" 
                       : "bg-zinc-900/60 border border-zinc-800/80 text-foreground/90 rounded-tl-sm"
                   }`}>
                     {msg.text}
@@ -1364,18 +1383,18 @@ export default function RoomPage({ params }: PageProps) {
         </div>
 
         {/* Message Input form */}
-        <form onSubmit={handleSendChat} className="p-3 border-t border-card-border bg-zinc-950 flex gap-2">
+        <form onSubmit={handleSendChat} className="p-3 border-t border-card-border bg-zinc-955 flex gap-2">
           <input
             type="text"
             required
             placeholder="Discuss code..."
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
-            className="flex-1 bg-zinc-900 border border-card-border focus:border-cyan-500/50 rounded-lg px-3 py-1.5 text-xs text-foreground focus:outline-none placeholder-zinc-600 transition-colors font-sans"
+            className="flex-1 bg-zinc-900 border border-card-border focus:border-red-550/50 rounded-lg px-3 py-1.5 text-xs text-foreground focus:outline-none placeholder-zinc-650 transition-colors font-retro-serif"
           />
           <button
             type="submit"
-            className="h-8 w-8 bg-cyan-400 hover:bg-cyan-300 text-zinc-950 rounded-lg flex items-center justify-center transition-colors cursor-pointer shrink-0 border-none animate-pulse-slow"
+            className="h-8 w-8 bg-red-950/20 hover:bg-red-900/40 text-red-500 border border-red-500/30 glow-red rounded-lg flex items-center justify-center transition-colors cursor-pointer shrink-0 animate-pulse-slow"
             title="Send message"
           >
             <Send className="w-3.5 h-3.5" />
@@ -1388,31 +1407,32 @@ export default function RoomPage({ params }: PageProps) {
       {/* Force Ask Username Modal if not in url query */}
       {showJoinModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-950/90 backdrop-blur-md animate-fade-in select-none">
-          <div className="w-full max-w-sm bg-card-bg border border-card-border rounded-2xl shadow-2xl p-6 relative">
-            <form onSubmit={handleJoinModalSubmit} className="space-y-5">
+          <div className="w-full max-w-sm bg-zinc-950 border border-red-950/30 rounded-2xl shadow-2xl p-6 relative overflow-hidden glow-red">
+            <FogParticles />
+            <form onSubmit={handleJoinModalSubmit} className="space-y-5 relative z-10">
               <div className="space-y-1 text-center">
-                <Users className="w-8 h-8 text-cyan-400 mx-auto mb-2" />
-                <h3 className="text-base font-bold text-foreground font-mono">Join Workspace</h3>
-                <p className="text-text-muted text-xs">
+                <Users className="w-8 h-8 text-red-500 mx-auto mb-2 glow-text-red animate-pulse" />
+                <h3 className="text-base font-bold text-foreground font-stranger uppercase tracking-widest text-lg glow-text-red">Join Workspace</h3>
+                <p className="text-text-muted text-xs font-retro-serif">
                   Enter your display name to connect to this coding session.
                 </p>
               </div>
 
-              <div className="space-y-1.5">
-                <label className="text-[10px] uppercase font-bold tracking-wider text-text-muted font-mono">Your Name</label>
+              <div className="space-y-1.5 font-retro-serif">
+                <label className="text-[10px] uppercase font-bold tracking-wider text-text-muted">Your Name</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Alex Henderson"
                   value={inputName}
                   onChange={(e) => setInputName(e.target.value)}
-                  className="w-full bg-background border border-card-border focus:border-cyan-500/50 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none placeholder-zinc-600 transition-colors"
+                  className="w-full bg-zinc-900 border border-red-950/30 focus:border-red-500/50 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none placeholder-zinc-650 transition-colors"
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full h-10 inline-flex items-center justify-center rounded-xl bg-cyan-400 font-mono font-bold text-xs text-zinc-950 hover:bg-cyan-350 transition-colors cursor-pointer"
+                className="w-full h-10 inline-flex items-center justify-center rounded-xl bg-red-950/40 hover:bg-red-900/30 text-red-500 border border-red-500/30 font-stranger uppercase tracking-wider text-xs transition-colors cursor-pointer glow-red"
               >
                 Authenticate & Enter
               </button>

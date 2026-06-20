@@ -15,6 +15,9 @@
   --color-text-muted: var(--text-muted);
   --font-sans: var(--font-inter);
   --font-mono: var(--font-fira-code);
+  --font-stranger: var(--font-stranger);
+  --font-spooky: var(--font-spooky);
+  --font-retro-serif: var(--font-retro-serif);
   --animate-float: float 6s ease-in-out infinite;
   --animate-pulse-slow: pulse-slow 3s ease-in-out infinite;
 }
@@ -35,18 +38,18 @@
 }
 
 html.dark {
-  --background: #030303;
-  --foreground: #f8fafc;
-  --accent: #00f0ff;
-  --accent-hover: #38bdf8;
+  --background: #000000;
+  --foreground: #f3f4f6;
+  --accent: #e50914;
+  --accent-hover: #ff2a35;
   
-  --card-bg: rgba(9, 9, 11, 0.6);
-  --card-border: rgba(255, 255, 255, 0.05);
-  --header-bg: rgba(3, 3, 3, 0.8);
-  --footer-bg: #050507;
-  --banner-bg: rgba(0, 240, 255, 0.04);
-  --text-muted: #94a3b8;
-  --grid-color: rgba(255, 255, 255, 0.05);
+  --card-bg: rgba(6, 8, 22, 0.78);
+  --card-border: rgba(229, 9, 20, 0.22);
+  --header-bg: rgba(2, 2, 4, 0.85);
+  --footer-bg: #030305;
+  --banner-bg: rgba(229, 9, 20, 0.08);
+  --text-muted: #8a9ab3;
+  --grid-color: rgba(229, 9, 20, 0.03);
 }
 
 body {
@@ -94,18 +97,100 @@ body {
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #09090b;
+  background: #000000;
 }
 ::-webkit-scrollbar-thumb {
-  background: #27272a;
+  background: #1f0b0c;
+  border: 1px solid rgba(229, 9, 20, 0.3);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #3f3f46;
+  background: #3a1113;
+  border-color: rgba(229, 9, 20, 0.6);
 }
 
 /* Smooth Scrolling */
 html {
   scroll-behavior: smooth;
 }
+
+/* Stranger Things Glow & Flicker Utilities */
+.glow-red {
+  box-shadow: 0 0 8px rgba(229, 9, 20, 0.35), 0 0 20px rgba(229, 9, 20, 0.15);
+}
+.glow-red-heavy {
+  box-shadow: 0 0 15px rgba(229, 9, 20, 0.65), 0 0 30px rgba(229, 9, 20, 0.25);
+}
+.glow-text-red {
+  text-shadow: 0 0 8px rgba(229, 9, 20, 0.85), 0 0 20px rgba(229, 9, 20, 0.45);
+}
+.glow-text-blue {
+  text-shadow: 0 0 6px rgba(10, 80, 255, 0.6), 0 0 12px rgba(10, 80, 255, 0.3);
+}
+.border-glow-red {
+  border-color: rgba(229, 9, 20, 0.45);
+  box-shadow: 0 0 6px rgba(229, 9, 20, 0.2);
+}
+.border-glow-red-hover {
+  transition: all 0.3s ease;
+}
+.border-glow-red-hover:hover {
+  border-color: rgba(229, 9, 20, 0.85);
+  box-shadow: 0 0 12px rgba(229, 9, 20, 0.45);
+}
+
+/* 80s Lights Flicker Effect */
+.animate-flicker {
+  animation: flicker-text 4s infinite alternate;
+}
+
+@keyframes flicker-text {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+    text-shadow: 0 0 8px rgba(229, 9, 20, 0.85), 0 0 20px rgba(229, 9, 20, 0.45);
+    opacity: 1;
+  }
+  20%, 24%, 55% {
+    text-shadow: none;
+    opacity: 0.75;
+  }
+}
+
+/* Floating spores / ash particles */
+.ash-particle {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(0.5px);
+  animation: float-ash linear infinite;
+}
+
+@keyframes float-ash {
+  0% {
+    transform: translateY(100vh) translateX(0) scale(0.8) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.55;
+  }
+  90% {
+    opacity: 0.55;
+  }
+  100% {
+    transform: translateY(-10vh) translateX(70px) scale(0.4) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.ash-1 { width: 3px; height: 3px; left: 10%; animation-duration: 14s; animation-delay: 0s; }
+.ash-2 { width: 5px; height: 5px; left: 25%; animation-duration: 18s; animation-delay: 2s; background: rgba(229, 9, 20, 0.16); }
+.ash-3 { width: 2px; height: 2px; left: 40%; animation-duration: 12s; animation-delay: 4s; }
+.ash-4 { width: 6px; height: 6px; left: 55%; animation-duration: 22s; animation-delay: 1s; background: rgba(229, 9, 20, 0.14); }
+.ash-5 { width: 4px; height: 4px; left: 70%; animation-duration: 16s; animation-delay: 6s; }
+.ash-6 { width: 3px; height: 3px; left: 85%; animation-duration: 15s; animation-delay: 3s; }
+.ash-7 { width: 5px; height: 5px; left: 95%; animation-duration: 20s; animation-delay: 5s; background: rgba(229, 9, 20, 0.15); }
+.ash-8 { width: 2px; height: 2px; left: 15%; animation-duration: 13s; animation-delay: 7s; }
+.ash-9 { width: 4px; height: 4px; left: 45%; animation-duration: 17s; animation-delay: 8s; }
+.ash-10 { width: 3px; height: 3px; left: 75%; animation-duration: 19s; animation-delay: 9s; background: rgba(229, 9, 20, 0.18); }
+
 
