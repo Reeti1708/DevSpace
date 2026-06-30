@@ -268,5 +268,40 @@ html {
   animation: spark-flicker-2 4.2s infinite;
 }
 
+/* Light theme primary button style (when not .dark) */
+html:not(.dark) .btn-primary-light {
+  background: linear-gradient(135deg, #FF6B6B 0%, #FF4D6D 100%) !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  box-shadow: 0 4px 12px rgba(255, 77, 109, 0.25) !important;
+  border: 1px solid rgba(255, 77, 109, 0.4) !important;
+  text-shadow: none !important;
+  transition: all 0.3s ease-in-out !important;
+}
+
+html:not(.dark) .btn-primary-light:hover {
+  filter: brightness(1.08) !important;
+  box-shadow: 0 6px 16px rgba(255, 77, 109, 0.35) !important;
+}
+
+html:not(.dark) .btn-primary-light:active {
+  transform: scale(0.98) !important;
+}
+
+/* Light theme secondary button style (when not .dark) */
+html:not(.dark) .btn-secondary-light {
+  background-color: #ffffff !important;
+  border-color: #d4d4d8 !important; /* border-zinc-300 */
+  color: #27272a !important; /* text-zinc-800 */
+  transition: all 0.3s ease-in-out !important;
+}
+
+html:not(.dark) .btn-secondary-light:hover {
+  background-color: #f4f4f5 !important; /* bg-zinc-100 */
+  border-color: #a1a1aa !important; /* border-zinc-400 */
+  color: #09090b !important;
+}
+
+
 
 

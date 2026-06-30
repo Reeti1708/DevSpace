@@ -196,7 +196,7 @@ export default function Home() {
         <span>Introducing DevSpace v2.0 with instant peer connection.</span>
         <button 
           onClick={openModal}
-          className="underline hover:text-red-400 font-bold transition-colors inline-flex items-center gap-0.5 cursor-pointer bg-transparent border-none"
+          className="underline hover:text-red-650 dark:hover:text-red-400 font-bold transition-colors inline-flex items-center gap-0.5 cursor-pointer bg-transparent border-none"
         >
           Try Now <ChevronRight className="w-3.5 h-3.5" />
         </button>
@@ -221,7 +221,7 @@ export default function Home() {
           </Link>
 
           {/* Navigation links (Desktop) */}
-          <nav className="hidden md:flex items-center gap-8 text-sm font-mono text-text-muted">
+          <nav className="hidden md:flex items-center gap-8 text-sm font-mono text-zinc-650 dark:text-text-muted">
             <Link href="#features" className="hover:text-foreground transition-colors py-1 relative group">
               Features
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-red-655 transition-all group-hover:w-full"></span>
@@ -241,7 +241,7 @@ export default function Home() {
             {/* Theme Toggle Button */}
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-lg border border-card-border bg-card-bg hover:bg-zinc-850/15 dark:hover:bg-zinc-800/20 transition-all text-text-muted hover:text-foreground cursor-pointer flex items-center justify-center"
+              className="p-2 rounded-lg border border-zinc-300 dark:border-card-border bg-white dark:bg-card-bg hover:bg-zinc-100 dark:hover:bg-zinc-800/20 transition-all text-zinc-700 dark:text-zinc-650 dark:text-text-muted hover:text-foreground cursor-pointer flex items-center justify-center shadow-sm"
               title={theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
             >
               {theme === "dark" ? (
@@ -262,7 +262,7 @@ export default function Home() {
                 </div>
                 <button
                   onClick={logout}
-                  className="h-8 border border-zinc-800 hover:border-zinc-700 bg-zinc-955 dark:bg-zinc-950 px-3 rounded-lg text-[10px] font-mono font-bold text-zinc-400 hover:text-rose-455 transition-colors cursor-pointer"
+                  className="h-8 border border-zinc-300 dark:border-zinc-800 bg-white dark:bg-zinc-955 dark:bg-zinc-950 px-3 rounded-lg text-[10px] font-mono font-bold text-zinc-700 dark:text-zinc-400 hover:text-rose-600 dark:hover:text-rose-455 transition-colors cursor-pointer shadow-sm"
                 >
                   Logout
                 </button>
@@ -271,13 +271,13 @@ export default function Home() {
               <div className="flex items-center gap-2">
                 <Link
                   href="/login"
-                  className="h-8 inline-flex items-center rounded-lg border border-zinc-800 hover:border-zinc-700 bg-zinc-955 dark:bg-zinc-950 px-3 text-xs font-mono font-bold text-zinc-400 hover:text-foreground transition-all"
+                  className="h-8 inline-flex items-center rounded-lg border border-zinc-300 dark:border-zinc-800 bg-white dark:bg-zinc-950 px-3 text-xs font-mono font-bold text-zinc-700 dark:text-zinc-400 hover:text-foreground dark:hover:text-white transition-all shadow-sm"
                 >
                   Login
                 </Link>
                 <Link
                   href="/signup"
-                  className="h-8 inline-flex items-center rounded-lg bg-red-650 hover:bg-red-600 px-3 text-xs font-mono font-bold text-white transition-all shadow-md shadow-red-655/20 border border-red-700/50 glow-red"
+                  className="btn-primary-light h-8 inline-flex items-center rounded-lg bg-red-650 hover:bg-red-600 px-3 text-xs font-mono font-bold text-white transition-all shadow-md shadow-red-655/20 border border-red-700/50 glow-red cursor-pointer"
                 >
                   Register
                 </Link>
@@ -299,7 +299,7 @@ export default function Home() {
           <div className="w-full min-w-0 max-w-[950px] space-y-6">
             
             {/* Inline announcement badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-card-border bg-card-bg text-xs font-mono text-text-muted hover:border-red-500/30 transition-colors mx-auto select-none">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-card-border bg-card-bg text-xs font-mono text-zinc-650 dark:text-text-muted hover:border-red-500/30 transition-colors mx-auto select-none">
               <Sparkles className="w-3.5 h-3.5 text-red-550 dark:text-red-400 animate-pulse" />
               <span>Real-Time Code Sync Engine</span>
               <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
@@ -312,7 +312,7 @@ export default function Home() {
                   in Real Time
                 </span>
               </h1>
-              <p className="mx-auto max-w-[750px] text-base sm:text-lg md:text-xl text-text-muted leading-relaxed px-4 font-retro-serif font-normal">
+              <p className="mx-auto max-w-[750px] text-base sm:text-lg md:text-xl text-zinc-650 dark:text-text-muted leading-relaxed px-4 font-retro-serif font-normal">
                 An ultra-responsive collaborative workspace for remote pair programming. Write code, chat with peers, and preview sandbox output instantly in one unified window.
               </p>
             </div>
@@ -321,7 +321,7 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-2">
               <button 
                 onClick={openModal}
-                className="inline-flex h-12 items-center justify-center rounded-xl bg-red-650 hover:bg-red-600 px-8 text-sm font-mono font-bold text-white shadow-xl shadow-red-655/15 hover:shadow-red-600/35 transition-all active:scale-98 w-full sm:w-auto cursor-pointer border border-red-700/50 glow-red"
+                className="btn-primary-light inline-flex h-12 items-center justify-center rounded-xl bg-red-650 hover:bg-red-600 px-8 text-sm font-mono font-bold text-white shadow-xl shadow-red-655/15 hover:shadow-red-600/35 transition-all active:scale-98 w-full sm:w-auto cursor-pointer border border-red-700/50 glow-red"
               >
                 Try it Out <ArrowRight className="ml-2 h-4 w-4" />
               </button>
@@ -329,7 +329,7 @@ export default function Home() {
                 href="https://github.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex h-12 items-center justify-center rounded-xl border border-card-border bg-card-bg hover:bg-card-bg/85 px-8 text-sm font-mono font-medium hover:text-foreground hover:border-red-500/40 transition-all w-full sm:w-auto cursor-pointer"
+                className="btn-secondary-light inline-flex h-12 items-center justify-center rounded-xl border border-card-border bg-card-bg hover:bg-card-bg/85 px-8 text-sm font-mono font-medium hover:text-foreground hover:border-red-500/40 transition-all w-full sm:w-auto cursor-pointer"
               >
                 View on GitHub
               </a>
@@ -376,13 +376,13 @@ export default function Home() {
           
           <div className="container mx-auto px-4 md:px-8 relative z-10 max-w-6xl">
             <div className="text-center mb-16 space-y-4">
-              <span className="text-xs uppercase tracking-widest text-red-500 dark:text-red-400 font-mono font-bold px-3 py-1 rounded-full bg-red-950/20 border border-red-950/30">
+              <span className="text-xs uppercase tracking-widest text-red-655 dark:text-red-400 font-mono font-bold px-3 py-1 rounded-full bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-955/30">
                 FEATURES
               </span>
               <h2 className="text-3xl font-extrabold tracking-wider text-foreground font-stranger sm:text-4xl uppercase">
                 Collaborative coding, reimagined.
               </h2>
-              <p className="text-text-muted md:text-lg max-w-[620px] mx-auto leading-relaxed font-retro-serif">
+              <p className="text-zinc-650 dark:text-text-muted md:text-lg max-w-[620px] mx-auto leading-relaxed font-retro-serif">
                 DevSpace packs powerful features to keep your team connected, coding, and deploying simultaneously.
               </p>
             </div>
@@ -390,49 +390,49 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
               
               {/* Feature 1: Real-time editing */}
-              <div className="group relative rounded-2xl border border-card-border bg-card-bg/60 p-8 backdrop-blur-sm hover:border-red-500/40 hover:bg-card-bg transition-all duration-300 shadow-sm hover:shadow-[0_0_20px_rgba(229,9,20,0.15)]">
+              <div className="group relative rounded-2xl border border-zinc-200 dark:border-card-border bg-white/80 dark:bg-card-bg/60 p-8 backdrop-blur-sm hover:border-zinc-300 dark:hover:border-red-500/40 hover:bg-white dark:hover:bg-card-bg transition-all duration-300 shadow-sm hover:shadow-[0_0_20px_rgba(229,9,20,0.15)]">
                 <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-red-500/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-t-2xl"></div>
-                <div className="w-12 h-12 rounded-xl bg-red-500/5 border border-red-500/10 flex items-center justify-center mb-6 group-hover:border-red-500/30 group-hover:bg-red-500/10 transition-all duration-300">
+                <div className="w-12 h-12 rounded-xl bg-red-50 dark:bg-red-500/5 border border-red-200 dark:border-red-500/10 flex items-center justify-center mb-6 group-hover:border-red-300 dark:group-hover:border-red-500/30 group-hover:bg-red-100 dark:group-hover:bg-red-500/10 transition-all duration-300">
                   <Code className="w-6 h-6 text-red-500 dark:text-red-400" />
                 </div>
                 <h3 className="text-xl font-bold text-foreground mb-3 font-stranger tracking-wide uppercase">Real-time editing</h3>
-                <p className="text-text-muted text-sm leading-relaxed font-retro-serif">
+                <p className="text-zinc-650 dark:text-text-muted text-sm leading-relaxed font-retro-serif">
                   Write and debug code synchronously with multi-cursor support. Experience conflict-free editing powered by modern sync engines, rendering updates instantly for everyone.
                 </p>
               </div>
 
               {/* Feature 2: Live chat */}
-              <div className="group relative rounded-2xl border border-card-border bg-card-bg/60 p-8 backdrop-blur-sm hover:border-red-500/40 hover:bg-card-bg transition-all duration-300 shadow-sm hover:shadow-[0_0_20px_rgba(229,9,20,0.15)]">
+              <div className="group relative rounded-2xl border border-zinc-200 dark:border-card-border bg-white/80 dark:bg-card-bg/60 p-8 backdrop-blur-sm hover:border-zinc-300 dark:hover:border-red-500/40 hover:bg-white dark:hover:bg-card-bg transition-all duration-300 shadow-sm hover:shadow-[0_0_20px_rgba(229,9,20,0.15)]">
                 <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-red-500/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-t-2xl"></div>
-                <div className="w-12 h-12 rounded-xl bg-red-500/5 border border-red-500/10 flex items-center justify-center mb-6 group-hover:border-red-500/30 group-hover:bg-red-500/10 transition-all duration-300">
+                <div className="w-12 h-12 rounded-xl bg-red-50 dark:bg-red-500/5 border border-red-200 dark:border-red-500/10 flex items-center justify-center mb-6 group-hover:border-red-300 dark:group-hover:border-red-500/30 group-hover:bg-red-100 dark:group-hover:bg-red-500/10 transition-all duration-300">
                   <MessageSquare className="w-6 h-6 text-red-500 dark:text-red-400" />
                 </div>
                 <h3 className="text-xl font-bold text-foreground mb-3 font-stranger tracking-wide uppercase">Live chat</h3>
-                <p className="text-text-muted text-sm leading-relaxed font-retro-serif">
+                <p className="text-zinc-650 dark:text-text-muted text-sm leading-relaxed font-retro-serif">
                   Discuss bugs, page layouts, and software architectures in real-time in the sidebar chat. Never context-switch to external communication tools again.
                 </p>
               </div>
 
               {/* Feature 3: Instant preview */}
-              <div className="group relative rounded-2xl border border-card-border bg-card-bg/60 p-8 backdrop-blur-sm hover:border-red-500/40 hover:bg-card-bg transition-all duration-300 shadow-sm hover:shadow-[0_0_20px_rgba(229,9,20,0.15)]">
+              <div className="group relative rounded-2xl border border-zinc-200 dark:border-card-border bg-white/80 dark:bg-card-bg/60 p-8 backdrop-blur-sm hover:border-zinc-300 dark:hover:border-red-500/40 hover:bg-white dark:hover:bg-card-bg transition-all duration-300 shadow-sm hover:shadow-[0_0_20px_rgba(229,9,20,0.15)]">
                 <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-red-500/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-t-2xl"></div>
-                <div className="w-12 h-12 rounded-xl bg-red-500/5 border border-red-500/10 flex items-center justify-center mb-6 group-hover:border-red-500/30 group-hover:bg-red-500/10 transition-all duration-300">
+                <div className="w-12 h-12 rounded-xl bg-red-50 dark:bg-red-500/5 border border-red-200 dark:border-red-500/10 flex items-center justify-center mb-6 group-hover:border-red-300 dark:group-hover:border-red-500/30 group-hover:bg-red-100 dark:group-hover:bg-red-500/10 transition-all duration-300">
                   <Play className="w-6 h-6 text-red-500 dark:text-red-400" />
                 </div>
                 <h3 className="text-xl font-bold text-foreground mb-3 font-stranger tracking-wide uppercase">Instant preview</h3>
-                <p className="text-text-muted text-sm leading-relaxed font-retro-serif">
+                <p className="text-zinc-650 dark:text-text-muted text-sm leading-relaxed font-retro-serif">
                   Watch your HTML, CSS, and JavaScript run instantly in a sandboxed iframe right alongside your editor. Get immediate visual feedback on code changes.
                 </p>
               </div>
 
               {/* Feature 4: Multi-user rooms */}
-              <div className="group relative rounded-2xl border border-card-border bg-card-bg/60 p-8 backdrop-blur-sm hover:border-red-500/40 hover:bg-card-bg transition-all duration-300 shadow-sm hover:shadow-[0_0_20px_rgba(229,9,20,0.15)]">
+              <div className="group relative rounded-2xl border border-zinc-200 dark:border-card-border bg-white/80 dark:bg-card-bg/60 p-8 backdrop-blur-sm hover:border-zinc-300 dark:hover:border-red-500/40 hover:bg-white dark:hover:bg-card-bg transition-all duration-300 shadow-sm hover:shadow-[0_0_20px_rgba(229,9,20,0.15)]">
                 <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-red-500/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-t-2xl"></div>
-                <div className="w-12 h-12 rounded-xl bg-red-500/5 border border-red-500/10 flex items-center justify-center mb-6 group-hover:border-red-500/30 group-hover:bg-red-500/10 transition-all duration-300">
+                <div className="w-12 h-12 rounded-xl bg-red-50 dark:bg-red-500/5 border border-red-200 dark:border-red-500/10 flex items-center justify-center mb-6 group-hover:border-red-300 dark:group-hover:border-red-500/30 group-hover:bg-red-100 dark:group-hover:bg-red-500/10 transition-all duration-300">
                   <Users className="w-6 h-6 text-red-500 dark:text-red-400" />
                 </div>
                 <h3 className="text-xl font-bold text-foreground mb-3 font-stranger tracking-wide uppercase">Multi-user rooms</h3>
-                <p className="text-text-muted text-sm leading-relaxed font-retro-serif">
+                <p className="text-zinc-650 dark:text-text-muted text-sm leading-relaxed font-retro-serif">
                   Create rooms instantly with customizable permissions. Invite team members with a secure, copyable link, and see live presence badges and remote cursors.
                 </p>
               </div>
@@ -445,7 +445,7 @@ export default function Home() {
         <section id="how-it-works" className="w-full py-28 bg-background relative overflow-hidden">
           <div className="container mx-auto px-4 md:px-8 max-w-5xl">
             <div className="text-center mb-20 space-y-4">
-              <span className="text-xs uppercase tracking-widest text-red-500 dark:text-red-400 font-mono font-bold px-3 py-1 rounded-full bg-red-950/20 border border-red-950/30">
+              <span className="text-xs uppercase tracking-widest text-red-655 dark:text-red-400 font-mono font-bold px-3 py-1 rounded-full bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-955/30">
                 WORKFLOW
               </span>
               <h2 className="text-3xl font-extrabold tracking-wider text-foreground font-stranger sm:text-4xl uppercase">
@@ -459,36 +459,36 @@ export default function Home() {
               
               {/* Step 1 */}
               <div className="flex flex-col items-center text-center space-y-5 group">
-                <div className="w-20 h-20 rounded-2xl bg-card-bg border border-card-border flex items-center justify-center text-xl font-bold font-mono text-red-500 dark:text-red-400 group-hover:border-red-500/40 group-hover:scale-105 shadow-md shadow-zinc-950/5 transition-all duration-300 relative">
+                <div className="w-20 h-20 rounded-2xl bg-white dark:bg-card-bg border border-zinc-200 dark:border-card-border flex items-center justify-center text-xl font-bold font-mono text-red-500 dark:text-red-400 group-hover:border-zinc-350 dark:group-hover:border-red-500/40 group-hover:scale-105 shadow-md shadow-zinc-950/5 transition-all duration-300 relative">
                   01
                   <div className="absolute inset-0 rounded-2xl bg-red-500/5 blur opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 </div>
                 <h3 className="text-lg font-bold font-stranger text-foreground tracking-wide uppercase">Create a Room</h3>
-                <p className="text-text-muted text-sm leading-relaxed max-w-[280px] font-retro-serif">
+                <p className="text-zinc-650 dark:text-text-muted text-sm leading-relaxed max-w-[280px] font-retro-serif">
                   Generate a custom playground room in one click and configure permissions.
                 </p>
               </div>
 
               {/* Step 2 */}
               <div className="flex flex-col items-center text-center space-y-5 group">
-                <div className="w-20 h-20 rounded-2xl bg-card-bg border border-card-border flex items-center justify-center text-xl font-bold font-mono text-red-500 dark:text-red-400 group-hover:border-red-500/40 group-hover:scale-105 shadow-md shadow-zinc-950/5 transition-all duration-300 relative">
+                <div className="w-20 h-20 rounded-2xl bg-white dark:bg-card-bg border border-zinc-200 dark:border-card-border flex items-center justify-center text-xl font-bold font-mono text-red-500 dark:text-red-400 group-hover:border-zinc-350 dark:group-hover:border-red-500/40 group-hover:scale-105 shadow-md shadow-zinc-950/5 transition-all duration-300 relative">
                   02
                   <div className="absolute inset-0 rounded-2xl bg-red-500/5 blur opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 </div>
                 <h3 className="text-lg font-bold font-stranger text-foreground tracking-wide uppercase">Invite Collaborators</h3>
-                <p className="text-text-muted text-sm leading-relaxed max-w-[280px] font-retro-serif">
+                <p className="text-zinc-650 dark:text-text-muted text-sm leading-relaxed max-w-[280px] font-retro-serif">
                   Share the secure URL with your team. They can join instantly with zero setup.
                 </p>
               </div>
 
               {/* Step 3 */}
               <div className="flex flex-col items-center text-center space-y-5 group">
-                <div className="w-20 h-20 rounded-2xl bg-card-bg border border-card-border flex items-center justify-center text-xl font-bold font-mono text-red-500 dark:text-red-400 group-hover:border-red-500/40 group-hover:scale-105 shadow-md shadow-zinc-950/5 transition-all duration-300 relative">
+                <div className="w-20 h-20 rounded-2xl bg-white dark:bg-card-bg border border-zinc-200 dark:border-card-border flex items-center justify-center text-xl font-bold font-mono text-red-500 dark:text-red-400 group-hover:border-zinc-350 dark:group-hover:border-red-500/40 group-hover:scale-105 shadow-md shadow-zinc-950/5 transition-all duration-300 relative">
                   03
                   <div className="absolute inset-0 rounded-2xl bg-red-500/5 blur opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 </div>
                 <h3 className="text-lg font-bold font-stranger text-foreground tracking-wide uppercase">Code & Preview Live</h3>
-                <p className="text-text-muted text-sm leading-relaxed max-w-[280px] font-retro-serif">
+                <p className="text-zinc-650 dark:text-text-muted text-sm leading-relaxed max-w-[280px] font-retro-serif">
                   Write code synchronously, chat on the panel, and see results render in the sandbox.
                 </p>
               </div>
@@ -498,7 +498,7 @@ export default function Home() {
         </section>
 
         {/* Tech Stack Showcase */}
-        <section id="tech-stack" className="w-full py-20 bg-background/40 border-y border-card-border bg-dot-pattern">
+        <section id="tech-stack" className="w-full py-20 bg-background/40 border-y border-zinc-200 dark:border-card-border bg-dot-pattern">
           <div className="container mx-auto px-4 md:px-8 max-w-4xl">
             <div className="text-center mb-12 space-y-2">
               <span className="text-xs uppercase tracking-widest text-red-500 dark:text-red-400 font-mono font-bold">
@@ -510,45 +510,45 @@ export default function Home() {
             <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-6 max-w-3xl mx-auto font-mono text-sm">
               
               {/* Next.js */}
-              <div className="group px-4 py-2.5 rounded-xl border border-card-border bg-card-bg/60 hover:border-zinc-550 dark:hover:border-zinc-750 transition-all duration-300 flex items-center gap-2 select-none shadow-sm">
+              <div className="group px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-card-border bg-white/80 dark:bg-card-bg/60 hover:border-zinc-350 dark:hover:border-zinc-750 transition-all duration-300 flex items-center gap-2 select-none shadow-sm">
                 <span className="w-2 h-2 rounded-full bg-foreground animate-pulse"></span>
-                <span className="font-semibold text-text-muted group-hover:text-foreground">Next.js</span>
+                <span className="font-semibold text-zinc-650 dark:text-text-muted group-hover:text-foreground">Next.js</span>
               </div>
 
               {/* Tailwind CSS */}
-              <div className="group px-4 py-2.5 rounded-xl border border-card-border bg-card-bg/60 hover:border-[#38bdf8]/40 transition-all duration-300 flex items-center gap-2 select-none shadow-sm">
+              <div className="group px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-card-border bg-white/80 dark:bg-card-bg/60 hover:border-[#38bdf8]/40 transition-all duration-300 flex items-center gap-2 select-none shadow-sm">
                 <span className="w-2 h-2 rounded-full bg-[#38bdf8] animate-pulse"></span>
-                <span className="font-semibold text-text-muted group-hover:text-[#38bdf8]">Tailwind CSS</span>
+                <span className="font-semibold text-zinc-650 dark:text-text-muted group-hover:text-[#38bdf8]">Tailwind CSS</span>
               </div>
 
               {/* Node.js */}
-              <div className="group px-4 py-2.5 rounded-xl border border-card-border bg-card-bg/60 hover:border-[#339933]/40 transition-all duration-300 flex items-center gap-2 select-none shadow-sm">
+              <div className="group px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-card-border bg-white/80 dark:bg-card-bg/60 hover:border-[#339933]/40 transition-all duration-300 flex items-center gap-2 select-none shadow-sm">
                 <span className="w-2 h-2 rounded-full bg-[#339933] animate-pulse"></span>
-                <span className="font-semibold text-text-muted group-hover:text-[#339933]">Node.js</span>
+                <span className="font-semibold text-zinc-650 dark:text-text-muted group-hover:text-[#339933]">Node.js</span>
               </div>
 
               {/* Express */}
-              <div className="group px-4 py-2.5 rounded-xl border border-card-border bg-card-bg/60 hover:border-zinc-500/40 transition-all duration-300 flex items-center gap-2 select-none shadow-sm">
+              <div className="group px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-card-border bg-white/80 dark:bg-card-bg/60 hover:border-zinc-500/40 transition-all duration-300 flex items-center gap-2 select-none shadow-sm">
                 <span className="w-2 h-2 rounded-full bg-zinc-400 animate-pulse"></span>
-                <span className="font-semibold text-text-muted group-hover:text-foreground">Express</span>
+                <span className="font-semibold text-zinc-650 dark:text-text-muted group-hover:text-foreground">Express</span>
               </div>
 
               {/* Socket.io */}
-              <div className="group px-4 py-2.5 rounded-xl border border-card-border bg-card-bg/60 hover:border-zinc-800 dark:hover:border-zinc-300 transition-all duration-300 flex items-center gap-2 select-none shadow-sm">
+              <div className="group px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-card-border bg-white/80 dark:bg-card-bg/60 hover:border-zinc-350 dark:hover:border-zinc-300 transition-all duration-300 flex items-center gap-2 select-none shadow-sm">
                 <span className="w-2 h-2 rounded-full bg-zinc-800 dark:bg-zinc-300 animate-pulse"></span>
-                <span className="font-semibold text-text-muted group-hover:text-foreground">Socket.io</span>
+                <span className="font-semibold text-zinc-650 dark:text-text-muted group-hover:text-foreground">Socket.io</span>
               </div>
 
               {/* MongoDB */}
-              <div className="group px-4 py-2.5 rounded-xl border border-card-border bg-card-bg/60 hover:border-[#47a248]/40 transition-all duration-300 flex items-center gap-2 select-none shadow-sm">
+              <div className="group px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-card-border bg-white/80 dark:bg-card-bg/60 hover:border-[#47a248]/40 transition-all duration-300 flex items-center gap-2 select-none shadow-sm">
                 <span className="w-2 h-2 rounded-full bg-[#47a248] animate-pulse"></span>
-                <span className="font-semibold text-text-muted group-hover:text-[#47a248]">MongoDB</span>
+                <span className="font-semibold text-zinc-650 dark:text-text-muted group-hover:text-[#47a248]">MongoDB</span>
               </div>
 
               {/* Monaco Editor */}
-              <div className="group px-4 py-2.5 rounded-xl border border-card-border bg-card-bg/60 hover:border-[#007acc]/40 transition-all duration-300 flex items-center gap-2 select-none shadow-sm">
+              <div className="group px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-card-border bg-white/80 dark:bg-card-bg/60 hover:border-[#007acc]/40 transition-all duration-300 flex items-center gap-2 select-none shadow-sm">
                 <span className="w-2 h-2 rounded-full bg-[#007acc] animate-pulse"></span>
-                <span className="font-semibold text-text-muted group-hover:text-[#007acc]">Monaco Editor</span>
+                <span className="font-semibold text-zinc-650 dark:text-text-muted group-hover:text-[#007acc]">Monaco Editor</span>
               </div>
 
             </div>
@@ -559,7 +559,7 @@ export default function Home() {
         <section id="benefits" className="w-full py-28 bg-background">
           <div className="container mx-auto px-4 md:px-8 max-w-5xl">
             <div className="text-center mb-20 space-y-4">
-              <span className="text-xs uppercase tracking-widest text-red-500 dark:text-red-400 font-mono font-bold px-3 py-1 rounded-full bg-red-950/20 border border-red-950/30">
+              <span className="text-xs uppercase tracking-widest text-red-655 dark:text-red-400 font-mono font-bold px-3 py-1 rounded-full bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-955/30">
                 BENEFITS
               </span>
               <h2 className="text-3xl font-extrabold tracking-wider text-foreground font-stranger sm:text-4xl uppercase">
@@ -570,52 +570,52 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
               
               {/* Benefit 1 */}
-              <div className="flex gap-5 p-6 rounded-2xl border border-card-border bg-card-bg/60 hover:border-red-500/30 hover:bg-card-bg transition-all duration-300 shadow-sm hover:shadow-[0_0_15px_rgba(229,9,20,0.1)]">
-                <div className="shrink-0 w-12 h-12 rounded-xl bg-red-500/5 border border-red-500/15 flex items-center justify-center text-red-500 dark:text-red-400">
+              <div className="flex gap-5 p-6 rounded-2xl border border-zinc-200 dark:border-card-border bg-white/80 dark:bg-card-bg/60 hover:border-zinc-300 dark:hover:border-red-500/30 hover:bg-white dark:hover:bg-card-bg transition-all duration-300 shadow-sm hover:shadow-[0_0_15px_rgba(229,9,20,0.1)]">
+                <div className="shrink-0 w-12 h-12 rounded-xl bg-red-55 dark:bg-red-500/5 border border-red-200 dark:border-red-500/15 flex items-center justify-center text-red-650 dark:text-red-400">
                   <Zap className="w-5 h-5" />
                 </div>
                 <div className="space-y-2">
                   <h3 className="text-lg font-bold font-stranger text-foreground tracking-wide uppercase">Faster team collaboration</h3>
-                  <p className="text-text-muted text-sm leading-relaxed font-retro-serif">
+                  <p className="text-zinc-650 dark:text-text-muted text-sm leading-relaxed font-retro-serif">
                     Instantly resolve bugs together instead of swapping static screenshots. Write mockups and interfaces collaboratively in minutes.
                   </p>
                 </div>
               </div>
 
               {/* Benefit 2 */}
-              <div className="flex gap-5 p-6 rounded-2xl border border-card-border bg-card-bg/60 hover:border-red-500/30 hover:bg-card-bg transition-all duration-300 shadow-sm hover:shadow-[0_0_15px_rgba(229,9,20,0.1)]">
-                <div className="shrink-0 w-12 h-12 rounded-xl bg-red-500/5 border border-red-500/15 flex items-center justify-center text-red-500 dark:text-red-400">
+              <div className="flex gap-5 p-6 rounded-2xl border border-zinc-200 dark:border-card-border bg-white/80 dark:bg-card-bg/60 hover:border-zinc-300 dark:hover:border-red-500/30 hover:bg-white dark:hover:bg-card-bg transition-all duration-300 shadow-sm hover:shadow-[0_0_15px_rgba(229,9,20,0.1)]">
+                <div className="shrink-0 w-12 h-12 rounded-xl bg-red-55 dark:bg-red-500/5 border border-red-200 dark:border-red-500/15 flex items-center justify-center text-red-650 dark:text-red-400">
                   <Laptop className="w-5 h-5" />
                 </div>
                 <div className="space-y-2">
                   <h3 className="text-lg font-bold font-stranger text-foreground tracking-wide uppercase">Live coding sessions</h3>
-                  <p className="text-text-muted text-sm leading-relaxed font-retro-serif">
+                  <p className="text-zinc-650 dark:text-text-muted text-sm leading-relaxed font-retro-serif">
                     Perfect for technical pair-interviews, coding education, remote workshops, and immediate developer peer review.
                   </p>
                 </div>
               </div>
 
               {/* Benefit 3 */}
-              <div className="flex gap-5 p-6 rounded-2xl border border-card-border bg-card-bg/60 hover:border-red-500/30 hover:bg-card-bg transition-all duration-300 shadow-sm hover:shadow-[0_0_15px_rgba(229,9,20,0.1)]">
-                <div className="shrink-0 w-12 h-12 rounded-xl bg-red-500/5 border border-red-500/15 flex items-center justify-center text-red-500 dark:text-red-400">
+              <div className="flex gap-5 p-6 rounded-2xl border border-zinc-200 dark:border-card-border bg-white/80 dark:bg-card-bg/60 hover:border-zinc-300 dark:hover:border-red-500/30 hover:bg-white dark:hover:bg-card-bg transition-all duration-300 shadow-sm hover:shadow-[0_0_15px_rgba(229,9,20,0.1)]">
+                <div className="shrink-0 w-12 h-12 rounded-xl bg-red-55 dark:bg-red-500/5 border border-red-200 dark:border-red-500/15 flex items-center justify-center text-red-650 dark:text-red-400">
                   <Share2 className="w-5 h-5" />
                 </div>
                 <div className="space-y-2">
                   <h3 className="text-lg font-bold font-stranger text-foreground tracking-wide uppercase">Easy project sharing</h3>
-                  <p className="text-text-muted text-sm leading-relaxed font-retro-serif">
+                  <p className="text-zinc-650 dark:text-text-muted text-sm leading-relaxed font-retro-serif">
                     Save work states, copy workspace invite links, or download static packages. Frictionless sharing with stakeholders.
                   </p>
                 </div>
               </div>
 
               {/* Benefit 4 */}
-              <div className="flex gap-5 p-6 rounded-2xl border border-card-border bg-card-bg/60 hover:border-red-500/30 hover:bg-card-bg transition-all duration-300 shadow-sm hover:shadow-[0_0_15px_rgba(229,9,20,0.1)]">
-                <div className="shrink-0 w-12 h-12 rounded-xl bg-red-500/5 border border-red-500/15 flex items-center justify-center text-red-500 dark:text-red-400">
+              <div className="flex gap-5 p-6 rounded-2xl border border-zinc-200 dark:border-card-border bg-white/80 dark:bg-card-bg/60 hover:border-zinc-300 dark:hover:border-red-500/30 hover:bg-white dark:hover:bg-card-bg transition-all duration-300 shadow-sm hover:shadow-[0_0_15px_rgba(229,9,20,0.1)]">
+                <div className="shrink-0 w-12 h-12 rounded-xl bg-red-55 dark:bg-red-500/5 border border-red-200 dark:border-red-500/15 flex items-center justify-center text-red-650 dark:text-red-400">
                   <CheckCircle2 className="w-5 h-5" />
                 </div>
                 <div className="space-y-2">
                   <h3 className="text-lg font-bold font-stranger text-foreground tracking-wide uppercase">Developer-friendly workflow</h3>
-                  <p className="text-text-muted text-sm leading-relaxed font-retro-serif">
+                  <p className="text-zinc-650 dark:text-text-muted text-sm leading-relaxed font-retro-serif">
                     Equipped with Monaco editor syntax engines, instant Hot Module Reload terminal consoles, and active chat capabilities.
                   </p>
                 </div>
@@ -631,7 +631,7 @@ export default function Home() {
 
           <div className="container mx-auto px-4 md:px-8 relative z-10 max-w-6xl">
             <div className="text-center mb-20 space-y-4">
-              <span className="text-xs uppercase tracking-widest text-red-500 dark:text-red-400 font-mono font-bold px-3 py-1 rounded-full bg-red-950/20 border border-red-950/30">
+              <span className="text-xs uppercase tracking-widest text-red-655 dark:text-red-400 font-mono font-bold px-3 py-1 rounded-full bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-955/30">
                 REVIEWS
               </span>
               <h2 className="text-3xl font-extrabold tracking-wider text-foreground font-stranger sm:text-4xl uppercase font-black">
@@ -642,64 +642,64 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
               
               {/* Testimonial 1 */}
-              <div className="rounded-2xl border border-card-border bg-card-bg/60 p-6 flex flex-col justify-between hover:border-red-500/30 hover:bg-card-bg transition-all duration-300 shadow-sm hover:shadow-[0_0_15px_rgba(229,9,20,0.15)]">
+              <div className="rounded-2xl border border-zinc-200 dark:border-card-border bg-white/80 dark:bg-card-bg/60 p-6 flex flex-col justify-between hover:border-zinc-300 dark:hover:border-red-500/30 hover:bg-white dark:hover:bg-card-bg transition-all duration-300 shadow-sm hover:shadow-[0_0_15px_rgba(229,9,20,0.15)]">
                 <div className="space-y-4 font-retro-serif text-sm">
                   <div className="flex gap-0.5">
                     {[...Array(5)].map((_, i) => (
                       <Star key={i} className="w-4 h-4 text-red-500 dark:text-red-400 fill-red-500 dark:fill-red-400" />
                     ))}
                   </div>
-                  <p className="text-text-muted italic leading-relaxed">
+                  <p className="text-zinc-650 dark:text-text-muted italic leading-relaxed">
                     &quot;DevSpace has completely transformed our remote technical interviewing. We can pair code, chat, and see results instantly without sharing screens.&quot;
                   </p>
                 </div>
-                <div className="flex items-center gap-3 pt-6 border-t border-card-border mt-6">
+                <div className="flex items-center gap-3 pt-6 border-t border-zinc-200 dark:border-card-border mt-6">
                   <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-red-650 to-red-955 flex items-center justify-center font-bold text-xs text-white">SK</div>
                   <div>
                     <h4 className="text-xs font-bold font-stranger text-foreground tracking-wide uppercase">Sarah K.</h4>
-                    <span className="text-[10px] text-text-muted block">Lead Frontend Engineer, Vercel</span>
+                    <span className="text-[10px] text-zinc-650 dark:text-text-muted block">Lead Frontend Engineer, Vercel</span>
                   </div>
                 </div>
               </div>
 
               {/* Testimonial 2 */}
-              <div className="rounded-2xl border border-card-border bg-card-bg/60 p-6 flex flex-col justify-between hover:border-red-500/30 hover:bg-card-bg transition-all duration-300 shadow-sm hover:shadow-[0_0_15px_rgba(229,9,20,0.15)]">
+              <div className="rounded-2xl border border-zinc-200 dark:border-card-border bg-white/80 dark:bg-card-bg/60 p-6 flex flex-col justify-between hover:border-zinc-300 dark:hover:border-red-500/30 hover:bg-white dark:hover:bg-card-bg transition-all duration-300 shadow-sm hover:shadow-[0_0_15px_rgba(229,9,20,0.15)]">
                 <div className="space-y-4 font-retro-serif text-sm">
                   <div className="flex gap-0.5">
                     {[...Array(5)].map((_, i) => (
                       <Star key={i} className="w-4 h-4 text-red-500 dark:text-red-400 fill-red-500 dark:fill-red-400" />
                     ))}
                   </div>
-                  <p className="text-text-muted italic leading-relaxed font-sans">
+                  <p className="text-zinc-650 dark:text-text-muted italic leading-relaxed font-sans">
                     &quot;As a student teaching web dev, DevSpace makes it so easy to review student code in real time. We spin up rooms in seconds and start hacking.&quot;
                   </p>
                 </div>
-                <div className="flex items-center gap-3 pt-6 border-t border-card-border mt-6">
+                <div className="flex items-center gap-3 pt-6 border-t border-zinc-200 dark:border-card-border mt-6">
                   <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-red-655 to-red-955 flex items-center justify-center font-bold text-xs text-white">MD</div>
                   <div>
                     <h4 className="text-xs font-bold font-stranger text-foreground tracking-wide uppercase">Marcus D.</h4>
-                    <span className="text-[10px] text-text-muted block">CS Instructor & Developer</span>
+                    <span className="text-[10px] text-zinc-650 dark:text-text-muted block">CS Instructor & Developer</span>
                   </div>
                 </div>
               </div>
 
               {/* Testimonial 3 */}
-              <div className="rounded-2xl border border-card-border bg-card-bg/60 p-6 flex flex-col justify-between hover:border-red-500/30 hover:bg-card-bg transition-all duration-300 shadow-sm hover:shadow-[0_0_15px_rgba(229,9,20,0.15)]">
+              <div className="rounded-2xl border border-zinc-200 dark:border-card-border bg-white/80 dark:bg-card-bg/60 p-6 flex flex-col justify-between hover:border-zinc-300 dark:hover:border-red-500/30 hover:bg-white dark:hover:bg-card-bg transition-all duration-300 shadow-sm hover:shadow-[0_0_15px_rgba(229,9,20,0.15)]">
                 <div className="space-y-4 font-retro-serif text-sm">
                   <div className="flex gap-0.5">
                     {[...Array(5)].map((_, i) => (
                       <Star key={i} className="w-4 h-4 text-red-500 dark:text-red-400 fill-red-500 dark:fill-red-400" />
                     ))}
                   </div>
-                  <p className="text-text-muted italic leading-relaxed">
+                  <p className="text-zinc-650 dark:text-text-muted italic leading-relaxed">
                     &quot;It feels like Google Docs for code but with the speed and capabilities of VS Code. The Monaco editor integration is top-notch.&quot;
                   </p>
                 </div>
-                <div className="flex items-center gap-3 pt-6 border-t border-card-border mt-6">
+                <div className="flex items-center gap-3 pt-6 border-t border-zinc-200 dark:border-card-border mt-6">
                   <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-red-650 to-red-950 flex items-center justify-center font-bold text-xs text-white">LW</div>
                   <div>
                     <h4 className="text-xs font-bold font-stranger text-foreground tracking-wide uppercase font-black font-mono">Liam W.</h4>
-                    <span className="text-[10px] text-text-muted block">Senior Dev, GitHub Contributor</span>
+                    <span className="text-[10px] text-zinc-650 dark:text-text-muted block">Senior Dev, GitHub Contributor</span>
                   </div>
                 </div>
               </div>
@@ -710,7 +710,7 @@ export default function Home() {
 
         {/* User Dashboard Section */}
         {user && (
-          <section id="dashboard" className="w-full py-20 border-t border-card-border bg-zinc-955/20 dark:bg-zinc-955/40 relative z-10 font-retro-serif">
+          <section id="dashboard" className="w-full py-20 border-t border-zinc-200 dark:border-card-border bg-zinc-50 dark:bg-zinc-955/40 relative z-10 font-retro-serif">
             <div className="container mx-auto px-4 md:px-8 max-w-5xl">
               
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10">
@@ -718,14 +718,14 @@ export default function Home() {
                   <h2 className="text-2xl font-bold tracking-wider text-foreground font-stranger uppercase">
                     Your Developer Workspace
                   </h2>
-                  <p className="text-sm text-text-muted">
+                  <p className="text-sm text-zinc-650 dark:text-text-muted">
                     Manage your persistent, real-time sync coding rooms.
                   </p>
                 </div>
                 
                 <button
                   onClick={openModal}
-                  className="h-10 inline-flex items-center gap-1.5 rounded-xl bg-red-650 hover:bg-red-600 px-5 text-xs font-mono font-bold text-white shadow-lg shadow-red-650/10 hover:shadow-red-600/30 transition-all cursor-pointer select-none border border-red-700/50 glow-red"
+                  className="btn-primary-light h-10 inline-flex items-center gap-1.5 rounded-xl bg-red-650 hover:bg-red-600 px-5 text-xs font-mono font-bold text-white shadow-lg shadow-red-650/10 hover:shadow-red-600/30 transition-all cursor-pointer select-none border border-red-700/50 glow-red"
                 >
                   <Plus className="w-4 h-4" />
                   <span>New Room</span>
@@ -733,18 +733,18 @@ export default function Home() {
               </div>
 
               {loadingRooms ? (
-                <div className="p-20 border border-card-border rounded-2xl bg-card-bg/40 flex flex-col items-center justify-center gap-4 shadow-sm">
+                <div className="p-20 border border-zinc-200 dark:border-card-border rounded-2xl bg-white dark:bg-card-bg/40 flex flex-col items-center justify-center gap-4 shadow-sm">
                   <Loader2 className="w-8 h-8 text-red-655 animate-spin" />
-                  <span className="text-xs font-mono text-text-muted">Fetching workspaces from MongoDB...</span>
+                  <span className="text-xs font-mono text-zinc-650 dark:text-text-muted">Fetching workspaces from MongoDB...</span>
                 </div>
               ) : userRooms.length === 0 ? (
-                <div className="p-20 border border-card-border border-dashed rounded-2xl bg-card-bg/25 text-center space-y-4 shadow-sm">
-                  <p className="text-sm text-text-muted max-w-sm mx-auto leading-relaxed">
+                <div className="p-20 border border-zinc-200 dark:border-card-border border-dashed rounded-2xl bg-white dark:bg-card-bg/25 text-center space-y-4 shadow-sm">
+                  <p className="text-sm text-zinc-650 dark:text-text-muted max-w-sm mx-auto leading-relaxed">
                     You don&apos;t have any active developer rooms yet. Spin up a sandboxed workspace to start collaborating or writing code!
                   </p>
                   <button
                     onClick={openModal}
-                    className="inline-flex h-10 items-center gap-1.5 rounded-xl border border-card-border bg-card-bg hover:bg-zinc-800/10 dark:hover:bg-zinc-100/10 px-5 text-xs font-bold text-red-550 dark:text-red-400 transition-all cursor-pointer"
+                    className="btn-primary-light inline-flex h-10 items-center gap-1.5 rounded-xl border border-card-border bg-card-bg hover:bg-zinc-850/10 dark:hover:bg-zinc-100/10 px-5 text-xs font-bold text-red-550 dark:text-red-400 transition-all cursor-pointer"
                   >
                     Create a Room
                   </button>
@@ -758,7 +758,7 @@ export default function Home() {
                     return (
                       <div
                         key={room.roomId}
-                        className="bg-card-bg/50 border border-card-border rounded-2xl p-6 hover:border-red-500/35 hover:bg-card-bg transition-all flex flex-col justify-between shadow-sm relative group hover:shadow-[0_0_15px_rgba(229,9,20,0.15)]"
+                        className="bg-white/80 dark:bg-card-bg/50 border border-zinc-200 dark:border-card-border rounded-2xl p-6 hover:border-zinc-300 dark:hover:border-red-500/35 hover:bg-white dark:hover:bg-card-bg transition-all flex flex-col justify-between shadow-sm relative group hover:shadow-[0_0_15px_rgba(229,9,20,0.15)]"
                       >
                         <div className="space-y-4 font-retro-serif">
                           <div className="flex justify-between items-start">
@@ -767,10 +767,10 @@ export default function Home() {
                             </span>
                             <span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase font-mono ${
                               isPrivate 
-                                ? "bg-rose-500/10 text-rose-550 dark:text-rose-455 border border-rose-500/20" 
+                                ? "bg-rose-50 dark:bg-rose-500/10 text-rose-700 dark:text-rose-455 border border-rose-200 dark:border-rose-500/20" 
                                 : isReadOnly 
-                                ? "bg-amber-500/10 text-amber-550 dark:text-amber-455 border border-amber-500/20" 
-                                : "bg-red-500/10 text-red-550 dark:text-red-400 border border-red-500/20"
+                                ? "bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-455 border border-amber-200 dark:border-amber-500/20" 
+                                : "bg-red-55 dark:bg-red-500/10 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-500/20"
                             }`}>
                               {room.visibility}
                             </span>
@@ -786,7 +786,7 @@ export default function Home() {
                           </div>
                         </div>
 
-                        <div className="pt-5 flex items-center justify-between border-t border-card-border mt-5 font-retro-serif">
+                        <div className="pt-5 flex items-center justify-between border-t border-zinc-200 dark:border-card-border mt-5 font-retro-serif">
                           <span className="text-[11px] text-zinc-500 flex items-center gap-1.5 font-mono">
                             <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
                             <span>Persistent</span>
@@ -813,20 +813,20 @@ export default function Home() {
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] -z-10 rounded-full bg-gradient-to-tr from-red-955/10 to-slate-955/20 blur-3xl opacity-30"></div>
           
           <div className="container mx-auto px-4 md:px-8 max-w-5xl">
-            <div className="rounded-3xl border border-card-border bg-gradient-to-b from-card-bg to-card-bg/95 p-10 sm:p-16 text-center shadow-lg relative overflow-hidden">
+            <div className="rounded-3xl border border-zinc-200 dark:border-card-border bg-white dark:bg-gradient-to-b dark:from-card-bg dark:to-card-bg/95 p-10 sm:p-16 text-center shadow-lg relative overflow-hidden">
               <div className="absolute top-0 left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-red-500/30 to-transparent"></div>
               
               <div className="space-y-6 max-w-xl mx-auto relative z-10">
                 <h2 className="text-3xl font-extrabold tracking-wider text-foreground font-stranger sm:text-4xl uppercase">
                   Start collaborating today
                 </h2>
-                <p className="text-text-muted text-sm sm:text-base leading-relaxed font-retro-serif">
+                <p className="text-zinc-650 dark:text-text-muted text-sm sm:text-base leading-relaxed font-retro-serif">
                   Join thousands of developers code sharing instantly. Spin up a sandboxed room and invite your peers to program together now.
                 </p>
                 <div className="pt-4 flex justify-center">
                   <button 
                     onClick={openModal}
-                    className="inline-flex h-12 items-center justify-center rounded-xl bg-red-650 hover:bg-red-600 px-8 text-sm font-mono font-bold text-white shadow-md shadow-red-655/10 hover:shadow-red-600/30 hover:scale-98 transition-all cursor-pointer border border-red-700/50 glow-red"
+                    className="btn-primary-light inline-flex h-12 items-center justify-center rounded-xl bg-red-650 hover:bg-red-600 px-8 text-sm font-mono font-bold text-white shadow-md shadow-red-655/10 hover:shadow-red-600/30 hover:scale-98 transition-all cursor-pointer border border-red-700/50 glow-red"
                   >
                     Try it Out <ArrowRight className="ml-2 w-4 h-4" />
                   </button>
@@ -839,10 +839,10 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="w-full py-12 border-t border-card-border bg-footer-bg relative z-10 font-mono text-xs text-text-muted">
+      <footer className="w-full py-12 border-t border-zinc-200 dark:border-card-border bg-zinc-50 dark:bg-footer-bg relative z-10 font-mono text-xs text-zinc-650 dark:text-zinc-650 dark:text-text-muted">
         <div className="container mx-auto px-4 md:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-md overflow-hidden border border-card-border flex items-center justify-center bg-card-bg">
+            <div className="w-7 h-7 rounded-md overflow-hidden border border-zinc-200 dark:border-card-border flex items-center justify-center bg-white dark:bg-card-bg">
               <img 
                 src="/logo.png" 
                 alt="DevSpace Logo" 
@@ -852,7 +852,7 @@ export default function Home() {
             <span className="text-base font-bold text-foreground font-stranger uppercase">DevSpace</span>
           </div>
           <div className="flex flex-wrap items-center gap-8">
-            <a href="https://github.com" className="hover:text-red-400 transition-colors flex items-center gap-1.5" target="_blank" rel="noopener noreferrer">
+            <a href="https://github.com" className="hover:text-red-655 dark:hover:text-red-400 transition-colors flex items-center gap-1.5" target="_blank" rel="noopener noreferrer">
               <Github className="w-4 h-4" /> GitHub
             </a>
             <a href="mailto:hello@devspace.io" className="hover:text-red-400 transition-colors">
@@ -868,7 +868,7 @@ export default function Home() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-955/80 backdrop-blur-md animate-fade-in">
           
           {/* Modal box */}
-          <div className="w-full max-w-md bg-card-bg border border-card-border rounded-2xl shadow-2xl overflow-hidden relative backdrop-blur-2xl">
+          <div className="w-full max-w-md bg-white dark:bg-card-bg border border-zinc-200 dark:border-card-border rounded-2xl shadow-2xl overflow-hidden relative backdrop-blur-2xl">
             
             {/* Top close button */}
             <button 
@@ -877,7 +877,7 @@ export default function Home() {
                 setModalStep("form");
                 setRoomCreatorName("");
               }}
-              className="absolute top-4 right-4 p-1.5 rounded-lg text-text-muted hover:text-foreground hover:bg-zinc-800/10 dark:hover:bg-zinc-100/10 transition-all cursor-pointer border-none bg-transparent"
+              className="absolute top-4 right-4 p-1.5 rounded-lg text-zinc-650 dark:text-text-muted hover:text-foreground hover:bg-zinc-800/10 dark:hover:bg-zinc-100/10 transition-all cursor-pointer border-none bg-transparent"
               title="Close Modal"
             >
               <X className="w-4.5 h-4.5" />
@@ -891,7 +891,7 @@ export default function Home() {
                     <Plus className="w-5 h-5 text-red-555" />
                     <span>Create Session Room</span>
                   </h3>
-                  <p className="text-text-muted text-xs font-retro-serif">
+                  <p className="text-zinc-650 dark:text-text-muted text-xs font-retro-serif">
                     Configure your sandboxed room and connect instantly.
                   </p>
                 </div>
@@ -900,38 +900,38 @@ export default function Home() {
                   
                   {/* Your Name */}
                   <div className="space-y-1.5 text-left">
-                    <label className="text-[10px] uppercase font-bold tracking-wider text-text-muted block font-mono">Your Name</label>
+                    <label className="text-[10px] uppercase font-bold tracking-wider text-zinc-650 dark:text-text-muted block font-mono">Your Name</label>
                     <input 
                       type="text" 
                       required
                       placeholder="e.g. Alex Henderson"
                       value={roomCreatorName}
                       onChange={(e) => setRoomCreatorName(e.target.value)}
-                      className="w-full bg-background border border-card-border focus:border-red-500/50 rounded-lg px-3 py-2 text-sm text-foreground placeholder-zinc-500 focus:outline-none focus:ring-1 focus:ring-red-500/30 transition-all font-retro-serif"
+                      className="w-full bg-white dark:bg-background border border-zinc-300 dark:border-card-border focus:border-red-500/50 rounded-lg px-3 py-2 text-sm text-foreground placeholder-zinc-400 focus:outline-none focus:ring-1 focus:ring-red-500/30 transition-all font-retro-serif"
                     />
                   </div>
 
                   {/* Room Name */}
                   <div className="space-y-1.5 text-left">
-                    <label className="text-[10px] uppercase font-bold tracking-wider text-text-muted block font-mono">Room ID / Workspace Name</label>
+                    <label className="text-[10px] uppercase font-bold tracking-wider text-zinc-650 dark:text-text-muted block font-mono">Room ID / Workspace Name</label>
                     <input 
                       type="text" 
                       required
                       placeholder="e.g. cyber-playground"
                       value={roomName}
                       onChange={(e) => setRoomName(e.target.value.replace(/\s+/g, "-").toLowerCase())}
-                      className="w-full bg-background border border-card-border focus:border-red-500/50 rounded-lg px-3 py-2 text-sm text-foreground placeholder-zinc-500 focus:outline-none focus:ring-1 focus:ring-red-500/30 transition-all font-mono"
+                      className="w-full bg-white dark:bg-background border border-zinc-300 dark:border-card-border focus:border-red-500/50 rounded-lg px-3 py-2 text-sm text-foreground placeholder-zinc-400 focus:outline-none focus:ring-1 focus:ring-red-500/30 transition-all font-mono"
                     />
                   </div>
 
                   {/* Room Visibility Options (Only if logged in) */}
                   {user && (
                     <div className="space-y-1.5 text-left">
-                      <label className="text-[10px] uppercase font-bold tracking-wider text-text-muted block font-mono">Room Sharing Visibility</label>
+                      <label className="text-[10px] uppercase font-bold tracking-wider text-zinc-650 dark:text-text-muted block font-mono">Room Sharing Visibility</label>
                       <select 
                         value={roomVisibility} 
                         onChange={(e) => setRoomVisibility(e.target.value as "public" | "readonly" | "private")}
-                        className="w-full bg-background border border-card-border focus:border-red-500/50 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-red-500/30 transition-all font-mono cursor-pointer"
+                        className="w-full bg-white dark:bg-background border border-zinc-300 dark:border-card-border focus:border-red-500/50 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-red-500/30 transition-all font-mono cursor-pointer"
                       >
                         <option value="public">Public (Collaborative Sync)</option>
                         <option value="readonly">Public Read-Only (Peers can only view)</option>
@@ -942,11 +942,11 @@ export default function Home() {
 
                   {/* Editor Theme Option */}
                   <div className="space-y-1.5 text-left">
-                    <label className="text-[10px] uppercase font-bold tracking-wider text-text-muted block font-mono">Default Theme</label>
+                    <label className="text-[10px] uppercase font-bold tracking-wider text-zinc-650 dark:text-text-muted block font-mono">Default Theme</label>
                     <select 
                       value={editorTheme} 
                       onChange={(e) => setEditorTheme(e.target.value)}
-                      className="w-full bg-background border border-card-border focus:border-red-500/50 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-red-500/30 transition-all font-mono cursor-pointer"
+                      className="w-full bg-white dark:bg-background border border-zinc-300 dark:border-card-border focus:border-red-500/50 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-red-500/30 transition-all font-mono cursor-pointer"
                     >
                       <option value="vs-dark">VS Dark (Default)</option>
                       <option value="monokai">Monokai Retro</option>
@@ -960,7 +960,7 @@ export default function Home() {
                 <div className="pt-2">
                   <button 
                     type="submit"
-                    className="w-full h-11 inline-flex items-center justify-center rounded-xl bg-red-650 hover:bg-red-600 font-mono font-bold text-xs text-white transition-all cursor-pointer shadow-md shadow-red-655/10 border border-red-700/50 glow-red"
+                    className="btn-primary-light w-full h-11 inline-flex items-center justify-center rounded-xl bg-red-650 hover:bg-red-600 font-mono font-bold text-xs text-white transition-all cursor-pointer shadow-md shadow-red-655/10 border border-red-700/50 glow-red"
                   >
                     Generate Room Workspace
                   </button>
@@ -981,7 +981,7 @@ export default function Home() {
                     <Check className="w-4.5 h-4.5 text-emerald-500" />
                   </div>
                   <h3 className="text-lg font-bold text-foreground font-stranger tracking-wide uppercase">Workspace Created!</h3>
-                  <p className="text-text-muted text-xs font-retro-serif">
+                  <p className="text-zinc-650 dark:text-text-muted text-xs font-retro-serif">
                     Your collaborative room is live and ready for coding.
                   </p>
                 </div>
@@ -990,8 +990,8 @@ export default function Home() {
                   
                   {/* Shareable Invite URL */}
                   <div className="space-y-1.5">
-                    <label className="text-[10px] uppercase font-bold tracking-wider text-text-muted block">Invite Link</label>
-                    <div className="flex gap-2 items-center bg-background rounded-lg p-1.5 border border-card-border">
+                    <label className="text-[10px] uppercase font-bold tracking-wider text-zinc-650 dark:text-text-muted block">Invite Link</label>
+                    <div className="flex gap-2 items-center bg-white dark:bg-background rounded-lg p-1.5 border border-zinc-300 dark:border-card-border">
                       <input 
                         type="text" 
                         readOnly 
@@ -1001,7 +1001,7 @@ export default function Home() {
                       <button
                         onClick={handleCopyLink}
                         type="button"
-                        className="p-1.5 hover:bg-zinc-800/10 dark:hover:bg-zinc-100/10 rounded-md text-text-muted hover:text-foreground transition-all cursor-pointer"
+                        className="p-1.5 hover:bg-zinc-800/10 dark:hover:bg-zinc-100/10 rounded-md text-zinc-650 dark:text-text-muted hover:text-foreground transition-all cursor-pointer"
                         title="Copy Invite Link"
                       >
                         {copied ? <Check className="w-4.5 h-4.5 text-emerald-550 dark:text-emerald-450" /> : <Copy className="w-4 h-4" />}
@@ -1010,7 +1010,7 @@ export default function Home() {
                   </div>
 
                   {/* Room status indicators */}
-                  <div className="p-3 rounded-lg border border-card-border bg-background/40 text-[11px] text-text-muted space-y-2">
+                  <div className="p-3 rounded-lg border border-zinc-300 dark:border-card-border bg-zinc-50 dark:bg-background/40 text-[11px] text-zinc-650 dark:text-zinc-650 dark:text-text-muted space-y-2">
                     <div className="flex items-center justify-between font-medium">
                       <span>Creator:</span>
                       <span className="text-foreground font-semibold">{roomCreatorName}</span>
@@ -1040,7 +1040,7 @@ export default function Home() {
                       router.push(`/room/${roomName}?username=${encodeURIComponent(creator)}&theme=${editorTheme}`);
                     }}
                     type="button"
-                    className="flex-1 h-11 inline-flex items-center justify-center rounded-xl bg-red-650 font-mono font-bold text-xs text-white hover:bg-red-600 hover:scale-98 transition-all cursor-pointer shadow-md shadow-red-655/10 border border-red-700/50 glow-red"
+                    className="btn-primary-light flex-1 h-11 inline-flex items-center justify-center rounded-xl bg-red-650 font-mono font-bold text-xs text-white hover:bg-red-600 hover:scale-98 transition-all cursor-pointer shadow-md shadow-red-655/10 border border-red-700/50 glow-red"
                   >
                     Enter Workspace
                   </button>
@@ -1051,7 +1051,7 @@ export default function Home() {
                       setRoomCreatorName("");
                     }}
                     type="button"
-                    className="px-4 h-11 border border-card-border hover:bg-zinc-800/10 dark:hover:bg-zinc-100/10 transition-all rounded-xl text-xs font-mono font-medium cursor-pointer"
+                    className="px-4 h-11 border border-zinc-300 dark:border-card-border hover:bg-zinc-100 dark:hover:bg-zinc-100/10 transition-all rounded-xl text-xs font-mono font-medium text-zinc-700 hover:text-zinc-955 dark:text-zinc-400 cursor-pointer"
                   >
                     Close
                   </button>
